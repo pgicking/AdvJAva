@@ -13,6 +13,7 @@ public class Project1 {
     for (String arg : args) {
       System.out.println(arg);
     }
+      //comments
     System.exit(1);
   }
 
