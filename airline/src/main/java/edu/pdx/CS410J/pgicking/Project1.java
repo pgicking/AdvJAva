@@ -42,6 +42,11 @@ public class Project1 {
       System.out.println(src);
       System.out.println(dest);
 
+      Airline airline = new Airline(name);
+
+      Flight flight = new Flight(number,src,dest);
+
+      airline.addFlight(flight);
 
 
   }
