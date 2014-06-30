@@ -2,28 +2,46 @@ package edu.pdx.CS410J.pgicking;
 
 import edu.pdx.cs410J.AbstractFlight;
 
+
 public class Flight extends AbstractFlight {
 
-    public  int getNumber(){
-        return 0;
+   int number;
+   String src;
+   String dest;
+   String Depart;
+   String Arrive;
+
+    public Flight(){}
+
+    public Flight(int number, String src, String dest, String depart, String arrive) {
+        this.number = number;
+        this.src = src;
+        this.dest = dest;
+        Depart = depart;
+        Arrive = arrive;
+    }
+
+    public int getNumber(){
+
+        return number;
     }
 
     public  String getSource(){
-        return "";
+        return src;
     }
 
     public  String getDepartureString(){
-        return "";
+        return Depart;
     }
 
     public  String getDestination(){
-        return "";
+        return dest;
     }
 
     public  String getArrivalString(){
-        return "";
+        return Arrive;
     }
 
 
-
 }
+

@@ -27,4 +27,12 @@ public class Project1Test extends InvokeMainTestCase {
     assertTrue(result.getErr().contains( "Missing command line arguments" ));
   }
 
+  @Test
+  public void testgetNumber() throws Exception {
+      Flight flight = new Flight();
+      int num;
+      num = flight.getNumber();
+      System.out.print(num);
+  }
+
 }
