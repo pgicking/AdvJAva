@@ -1,6 +1,7 @@
 package edu.pdx.CS410J.pgicking;
 
 import edu.pdx.cs410J.AbstractAirline;
+import edu.pdx.cs410J.AbstractFlight;
 
 /**
  * The main class for the CS410J airline Project
@@ -18,3 +19,4 @@ public class Project1 {
   }
 
 }
+
