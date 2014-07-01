@@ -13,12 +13,12 @@ public class Flight extends AbstractFlight {
 
     public Flight(){}
 
-    public Flight(int number, String src, String dest) {
+    public Flight(int number, String src, String dest, String depart, String arrive) {
         this.number = number;
         this.src = src;
         this.dest = dest;
-        //Depart = depart;_
-        //Arrive = arrive;
+        Depart = depart;
+        Arrive = arrive;
     }
 
     public int getNumber(){
@@ -42,6 +42,15 @@ public class Flight extends AbstractFlight {
         return Arrive;
     }
 
-
+    @Override
+    public String toString() {
+        return
+                 number + " " +
+                 src + " " +
+                 Depart + " " +
+                 dest + " " +
+                 Arrive + " "
+                ;
+    }
 }
 

@@ -29,6 +29,11 @@ public class Airline extends AbstractAirline {
 
     @Override
     public Collection getFlights() {
-        return null;
+        return FlightList;
+    }
+
+    @Override
+    public String toString() {
+        return  Name + " " + FlightList.toString();
     }
 }
