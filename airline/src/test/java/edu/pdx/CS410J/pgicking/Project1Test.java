@@ -48,7 +48,21 @@ public class Project1Test extends InvokeMainTestCase {
         String errormessage = "Flight number is invalid";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }
-    
+
+    @Test
+    public void testAirportCodesLargerThanThree(){
+        String [] Arguments = {"-print", "alaska", "123", "PDXXXXXXX", "3/15/2014 10:39", "ALAXXX", "03/2/14 1:35"};
+        String errormessage = "Source or Destination airport codes are larger than 3 letters";
+        InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
+    }
+
+    @Test
+    public void testAirportCodesSmallerThanThree(){
+        String [] Arguments = {"-print", "alaska", "123", "PX", "3/15/2014 10:39", "AL", "03/2/14 1:35"};
+        String errormessage = "Source or Destination airport codes are less than 3 letters";
+        InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
+    }
+
   @Test
   public void testWrongDateFormatShortYear(){
       String[] Arguments = {"-print", "alaska", "123", "PDX", "3/15/2014 10:39", "ALA", "03/2/14 1:35"};

@@ -63,13 +63,11 @@ public class Project1 {
           //System.out.println(arg);
       }
       if(args[2+indx].length() > 3 || args[4+indx].length() > 3){
-          System.err.println("Source or Destination airport codes are" +
-                  "larger than 3 letters");
+          System.err.println("Source or Destination airport codes are larger than 3 letters");
           System.exit(1);
       }
       if(args[2+indx].length() < 3 || args[4+indx].length() < 3){
-          System.err.println("Source or Destination airport codes are" +
-                  "less than 3 letters");
+          System.err.println("Source or Destination airport codes are less than 3 letters");
           System.exit(1);
       }
 
@@ -93,7 +91,9 @@ public class Project1 {
 
       System.exit(0);
   }
-
+    //Validates the arrival string to make sure its in correct format, then returns it
+    //@Param    arg     The index of the arguments containing arrival string
+    //@return   arg     The validated arrival string
     private static String ValidateArrivalString(String arg) {
         if(!arg.matches("\\d{1,2}" + "/" + "\\d{1,2}" + "/" + "\\d{4}" + "\\s+" + "\\d{1,2}:\\d{2}")){
             System.err.println("\n"+ arg + " is not a valid date/time format!\n" +
@@ -103,6 +103,9 @@ public class Project1 {
         return arg;
     }
 
+    //Validates the departure string to make sure its in correct format, then returns it
+    //@Param    arg     The index of the arguments containing departure string
+    //@return   arg     The validated departure string
     private static String ValidateDepartureString(String arg) {
         if(!arg.matches("\\d{1,2}" + "/" + "\\d{1,2}" + "/" + "\\d{4}" + "\\s+" + "\\d{1,2}:\\d{2}")){
             System.err.println("\n"+ arg + " is not a valid date/time format!\n" +
@@ -112,7 +115,9 @@ public class Project1 {
         return arg;
 
     }
-
+    //Validates to make sure the flight number is numeric
+    //@Param    arg     The flight number from command line arguments
+    //@return   The validated flight number
     public static int ValidateFlightNumber(String arg){
         int number = 0;
         try{
