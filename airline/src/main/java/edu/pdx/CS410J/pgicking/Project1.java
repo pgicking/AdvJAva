@@ -8,6 +8,16 @@ import edu.pdx.cs410J.AbstractFlight;
  */
 public class Project1 {
 
+  /*
+  The main method, does most of the work for the project
+  Reads the command line arguments and parses them into respective
+  data fields, which are then passed into the airline and flight classes
+  to make an airline with at most one flight (for project 1).
+  Theres two option arguments, -README and -print.
+  -print prints out the flight information
+  -README prints out how to use the program
+  @Param    args    The list of arguments to create a flight and airline
+   */
   public static void main(String[] args) {
     Class c = AbstractAirline.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
     if(args.length == 0) {
@@ -62,22 +72,13 @@ public class Project1 {
                   "less than 3 letters");
           System.exit(1);
       }
-      if(!args[3+indx].matches("\\d{1,2}" + "/" + "\\d{1,2}" + "/" + "\\d{4}" + "\\s+" + "\\d{1,2}:\\d{2}")){
-          System.err.println("\n"+ args[3+indx] + " is not a valid date/time format!\n" +
-                  "Correct format is: MM/DD/YYYY 12:34");
-          System.exit(1);
-      }
-      if(!args[5+indx].matches("\\d{1,2}" + "/" + "\\d{1,2}" + "/" + "\\d{4}" + "\\s+" + "\\d{1,2}:\\d{2}")){
-          System.err.println("\n"+ args[5+indx] + " is not a valid date/time format!\n" +
-                  "Correct format is: MM/DD/YYYY 12:34");
-          System.exit(1);
-      }
+
       name = args[indx];
-      number = Integer.parseInt(args[1+indx]);
+      number = ValidateFlightNumber(args[1+indx]);
       src = args[2+indx];
-      Depart = args[3+indx];
+      Depart = ValidateDepartureString(args[3 + indx]);
       dest = args[4+indx];
-      Arrive = args[5+indx];
+      Arrive = ValidateArrivalString(args[5 + indx]);
 
       Airline airline = new Airline(name);
 
@@ -90,9 +91,40 @@ public class Project1 {
           System.out.println(print);
       }
 
+      System.exit(0);
   }
 
+    private static String ValidateArrivalString(String arg) {
+        if(!arg.matches("\\d{1,2}" + "/" + "\\d{1,2}" + "/" + "\\d{4}" + "\\s+" + "\\d{1,2}:\\d{2}")){
+            System.err.println("\n"+ arg + " is not a valid date/time format!\n" +
+                    "Correct format is: MM/DD/YYYY HH:MM");
+            System.exit(1);
+        }
+        return arg;
+    }
 
+    private static String ValidateDepartureString(String arg) {
+        if(!arg.matches("\\d{1,2}" + "/" + "\\d{1,2}" + "/" + "\\d{4}" + "\\s+" + "\\d{1,2}:\\d{2}")){
+            System.err.println("\n"+ arg + " is not a valid date/time format!\n" +
+                    "Correct format is: MM/DD/YYYY HH:MM");
+            System.exit(1);
+        }
+        return arg;
+
+    }
+
+    public static int ValidateFlightNumber(String arg){
+        int number = 0;
+        try{
+            number = Integer.parseInt(arg);
+        } catch (NumberFormatException nfe) {
+            System.err.println("Flight number is invalid");
+            System.exit(1);
+        }
+        return number;
+    }
+
+    //Displays the readme if -README is passed in as an argument
     private static void DisplayREADME() {
         System.out.println("This program takes in arguments to create an airline" +
                 " and flights for that airline. \n Usage:  java edu.pdx.cs410J.<login-id>.Project1 [options] <args> [options]\n" +

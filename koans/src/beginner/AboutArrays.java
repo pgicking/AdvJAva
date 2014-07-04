@@ -14,13 +14,13 @@ public class AboutArrays {
 		// arrays utilize default object equality (A == {1} B == {1}, though A
 		// and B contain the same thing, the container is not the same
 		// referenced array instance...
-		assertEquals(new int[] {1}.equals(new int[] {1}), __);
+		assertEquals(new int[] {1}.equals(new int[] {1}), false);
 	}
 	
 	@Koan
 	public void cloneEqualityIsNotRespected(){ //!
 		int[] original = new int[] { 1 };
-		assertEquals(original.equals(original.clone()), __);
+		assertEquals(original.equals(original.clone()), false);
 	}
 	
 	@Koan
