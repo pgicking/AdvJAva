@@ -44,23 +44,24 @@ public class Project1 {
       String print;
       int Display = 0; //Display flag
       int indx = 0;
+      int i = 0;
 
       for (String arg : args) {
           if(arg.contains("-README")){
               DisplayREADME();
           }
+          //System.out.println(arg);
+          //System.out.println(arg.contains("-print"));
           if(arg.contains("-print")){
               Display = 1;
               //If -print is at beginning, offset indx by one
               //otherwise, offset index by zero
-              if(arg.indexOf("-print") == 0){
+              if(arg.compareTo("-print") == 0 && i == 0){
                   indx = 1;
               }
-              else{
-                  indx = 0;
-              }
           }
-          //System.out.println(arg);
+          //System.out.println(indx);
+          ++i;
       }
       if(args[2+indx].length() > 3 || args[4+indx].length() > 3){
           System.err.println("Source or Destination airport codes are larger than 3 letters");
