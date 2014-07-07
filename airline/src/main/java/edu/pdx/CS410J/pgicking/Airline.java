@@ -42,6 +42,9 @@ public class Airline extends AbstractAirline {
 
     @Override
     public String toString() {
-        return  Name + " " + FlightList.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append(FlightList.element().toString());
+
+        return  Name + " " + sb;
     }
 }

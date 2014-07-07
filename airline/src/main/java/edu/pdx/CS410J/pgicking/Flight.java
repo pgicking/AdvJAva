@@ -66,8 +66,7 @@ public class Flight extends AbstractFlight {
                  src + " " +
                  Depart + " " +
                  dest + " " +
-                 Arrive + " "
-                ;
+                 Arrive;
     }
 }
 
