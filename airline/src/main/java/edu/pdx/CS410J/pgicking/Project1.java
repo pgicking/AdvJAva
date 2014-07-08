@@ -4,18 +4,24 @@ import edu.pdx.cs410J.AbstractAirline;
 import edu.pdx.cs410J.AbstractFlight;
 
 /**
- * The main class for the CS410J airline Project
+ * @author Peter Gicking
+ */
+
+/**
+ * <p>The main class for the CS410J airline Project, contains the methods that parse the command line
+ * and format and validate the string of flight information to print out</p>
  */
 public class Project1 {
 
-  /*
-  The main method, does most of the work for the project
+  /**
+  <p>The main method, does most of the work for the project
   Reads the command line arguments and parses them into respective
   data fields, which are then passed into the airline and flight classes
-  to make an airline with at most one flight (for project 1).
-  Theres two option arguments, -README and -print.
-  -print prints out the flight information
-  -README prints out how to use the program
+  to make an airline with at most one flight (for project 1).</p>
+
+  <p>Theres two option arguments, -README and -print.</p>
+  <p>-print prints out the flight information</p>
+  <p>-README prints out how to use the program</p>
   @param    args    The list of arguments to create a flight and airline
    */
   public static void main(String[] args) {
@@ -93,10 +99,10 @@ public class Project1 {
 
       System.exit(0);
   }
-    /*
+    /**
     Validates the arrival string to make sure its in correct format, then returns it
     @param    arg     The index of the arguments containing arrival string
-    @return   arg     The validated arrival string
+    @return   The validated arrival string
     */
     private static String ValidateArrivalString(String arg) {
         if(!arg.matches("\\d{1,2}" + "/" + "\\d{1,2}" + "/" + "\\d{4}" + "\\s+" + "\\d{1,2}:\\d{2}")){
@@ -107,10 +113,10 @@ public class Project1 {
         return arg;
     }
 
-    /*
+    /**
     Validates the departure string to make sure its in correct format, then returns it
-    @param    arg     The index of the arguments containing departure string
-    @return   arg     The validated departure string
+    @param    arg    The index of the arguments containing departure string
+    @return   The validated departure string
     */
     private static String ValidateDepartureString(String arg) {
         if(!arg.matches("\\d{1,2}" + "/" + "\\d{1,2}" + "/" + "\\d{4}" + "\\s+" + "\\d{1,2}:\\d{2}")){
@@ -121,10 +127,10 @@ public class Project1 {
         return arg;
 
     }
-    /*
+    /**
     Validates to make sure the flight number is numeric
-    @param    arg     The flight number from command line arguments
-    @return   The validated flight number
+    @param  arg    The flight number from command line arguments
+    @return The validated flight number
     */
     public static int ValidateFlightNumber(String arg){
         int number = 0;
@@ -137,7 +143,9 @@ public class Project1 {
         return number;
     }
 
-    //Displays the readme if -README is passed in as an argument
+    /**
+     *Displays the readme if -README is passed in as an argument, ignoring all other arguments
+     */
     private static void DisplayREADME() {
         System.out.println("This program takes in arguments to create an airline" +
                 " and flights for that airline. \n Usage:  java edu.pdx.cs410J.<login-id>.Project1 [options] <args> [options]\n" +
