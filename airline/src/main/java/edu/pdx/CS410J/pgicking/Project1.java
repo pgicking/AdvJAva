@@ -16,7 +16,7 @@ public class Project1 {
   Theres two option arguments, -README and -print.
   -print prints out the flight information
   -README prints out how to use the program
-  @Param    args    The list of arguments to create a flight and airline
+  @param    args    The list of arguments to create a flight and airline
    */
   public static void main(String[] args) {
     Class c = AbstractAirline.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
@@ -28,13 +28,14 @@ public class Project1 {
         System.err.println("Too many command line arguments");
         System.exit(1);
     }
-/*    name The name of the airline
+      /*
+      name The name of the airline
       flightNumber The flight number
       src Three-letter code of departure airport
       departTime Departure date and time (24-hour time)
       dest Three-letter code of arrival airport
       arriveTime Arrival date and time (24-hour time)
-*/
+      */
       String name = null;
       int number;
       String src = null;
@@ -92,9 +93,11 @@ public class Project1 {
 
       System.exit(0);
   }
-    //Validates the arrival string to make sure its in correct format, then returns it
-    //@Param    arg     The index of the arguments containing arrival string
-    //@return   arg     The validated arrival string
+    /*
+    Validates the arrival string to make sure its in correct format, then returns it
+    @param    arg     The index of the arguments containing arrival string
+    @return   arg     The validated arrival string
+    */
     private static String ValidateArrivalString(String arg) {
         if(!arg.matches("\\d{1,2}" + "/" + "\\d{1,2}" + "/" + "\\d{4}" + "\\s+" + "\\d{1,2}:\\d{2}")){
             System.err.println("\n"+ arg + " is not a valid date/time format!\n" +
@@ -104,9 +107,11 @@ public class Project1 {
         return arg;
     }
 
-    //Validates the departure string to make sure its in correct format, then returns it
-    //@Param    arg     The index of the arguments containing departure string
-    //@return   arg     The validated departure string
+    /*
+    Validates the departure string to make sure its in correct format, then returns it
+    @param    arg     The index of the arguments containing departure string
+    @return   arg     The validated departure string
+    */
     private static String ValidateDepartureString(String arg) {
         if(!arg.matches("\\d{1,2}" + "/" + "\\d{1,2}" + "/" + "\\d{4}" + "\\s+" + "\\d{1,2}:\\d{2}")){
             System.err.println("\n"+ arg + " is not a valid date/time format!\n" +
@@ -116,9 +121,11 @@ public class Project1 {
         return arg;
 
     }
-    //Validates to make sure the flight number is numeric
-    //@Param    arg     The flight number from command line arguments
-    //@return   The validated flight number
+    /*
+    Validates to make sure the flight number is numeric
+    @param    arg     The flight number from command line arguments
+    @return   The validated flight number
+    */
     public static int ValidateFlightNumber(String arg){
         int number = 0;
         try{
