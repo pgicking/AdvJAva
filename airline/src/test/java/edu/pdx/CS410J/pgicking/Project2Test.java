@@ -127,4 +127,11 @@ public class Project2Test extends InvokeMainTestCase{
         String errormessage = "This program takes in arguments to create an airline";
         InvokeMainWithArgsMatchForStdOut(Arguments, errormessage);
     }
+    @Ignore
+    @Test
+    public void testOnlyTextFileArgs(){
+        String[] Arguments = {"-textFile", "parser.txt"};
+        String errormessage = "parser.txt";
+        InvokeMainWithArgsMatchForStdOut(Arguments,errormessage);
+    }
 }

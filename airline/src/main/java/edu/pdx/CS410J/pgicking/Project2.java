@@ -46,9 +46,10 @@ public class Project2 {
                     indx = 1;
                 }
             }
-            fileName = parseFileName(args);
-            if(args.length == 2 && arg.contains("-textFile")){
-                parseFlag = 1;
+            if(arg.contains("-textFile")){
+                indx = 3;
+                fileName = parseFileName(args);
+                parseFlag = 0;
                 TextParser parser = new TextParser(fileName);
                 try {
                     parser.parse();
@@ -109,6 +110,7 @@ public class Project2 {
             }
             ++i;
          }
+        System.out.println(fileName);
         return fileName;
         }
 
