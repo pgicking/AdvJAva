@@ -48,14 +48,7 @@ public class Project2 {
             }
             if(arg.contains("-textFile")){
                 indx = 3;
-                fileName = parseFileName(args);
                 parseFlag = 0;
-                TextParser parser = new TextParser(fileName);
-                try {
-                    parser.parse();
-                } catch (ParserException e) {
-                    e.printStackTrace();
-                }
 
             }
             //System.out.println(indx);
@@ -86,6 +79,17 @@ public class Project2 {
         Flight flight = new Flight(number,src,dest,Depart,Arrive);
 
         airline.addFlight(flight);
+
+        fileName = parseFileName(args);
+        if(parseFlag == 1){
+            TextParser parser = new TextParser(fileName,airline);
+            try {
+                parser.parse();
+            } catch (ParserException e) {
+                e.printStackTrace();
+            }
+        }
+
         if(Display == 1) {
             print = airline.toString();
 
