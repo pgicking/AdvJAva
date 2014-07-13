@@ -43,20 +43,18 @@ public class Project2 {
                 //If -print is at beginning, offset indx by one
                 //otherwise, offset index by zero
                 if(arg.compareTo("-print") == 0 && i == 0){
-                    indx = 1;
+                    indx += 1;
                 }
             }
             if(arg.contains("-textFile")){
-                indx = 3;
-                parseFlag = 0;
+                indx += 2;
+                parseFlag = 1;
 
             }
             //System.out.println(indx);
             ++i;
         }
-        if(parseFlag == 0) {
             ValidateArgsLength(args);
-        }
 
         if(args[2+indx].length() > 3 || args[4+indx].length() > 3){
             System.err.println("Source or Destination airport codes are larger than 3 letters");
@@ -111,10 +109,11 @@ public class Project2 {
             //The file name
             if (i - num == 1) {
                 fileName = arg;
+                break;
             }
             ++i;
          }
-        System.out.println(fileName);
+        //System.out.println(fileName);
         return fileName;
         }
 
@@ -124,7 +123,7 @@ public class Project2 {
             System.err.println("Missing command line arguments");
             System.exit(1);
         }
-        if(args.length > 8){
+        if(args.length > 10){
             System.err.println("Too many command line arguments");
             System.exit(1);
         }
@@ -182,7 +181,8 @@ public class Project2 {
      */
     private static void DisplayREADME() {
         System.out.println("This program takes in arguments to create an airline" +
-                " and flights for that airline. \n Usage:  java edu.pdx.cs410J.<login-id>.Project1 [options] <args> [options]\n" +
+                " and flights for that airline that can be stored in a file." +
+                "\nUsage:  java edu.pdx.cs410J.<login-id>.Project1 [options] <args> [options]\n" +
                 "The arguments need to be put in the correct order for the program to work" +
                 "\n This order is" +
                 "name: The name of the airline\n" +
@@ -191,7 +191,11 @@ public class Project2 {
                 "departTime: Departure date and time (24-hour time)\n" +
                 "dest: Three-letter code of arrival airport\n" +
                 "arriveTime: Arrival date and time (24-hour time)\n" +
-                "Example command line string alaska 123 PDX \"3/15/2014 10:39\" ALA \"03/2/2014 1:35\"");
+                "[Options]\n-textFile file: Where to read/write the airline info\n" +
+                "-print: Prints a description of the new flight\n" +
+                "-README: Prints a README for this project and exits\n" +
+                "Example command -print -textFile output.txt alaska 123 PDX \"03/15/2014 10:39\" ALA  \"03/02/2014 01:35\"" +
+                "");
         System.exit(0);
     }
 }

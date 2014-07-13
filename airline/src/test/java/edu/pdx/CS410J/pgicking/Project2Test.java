@@ -4,6 +4,11 @@ import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import edu.pdx.cs410J.InvokeMainTestCase;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -42,7 +47,7 @@ public class Project2Test extends InvokeMainTestCase{
     }
     @Test
     public void testTooManyArguments(){
-        String [] Arguments = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+        String [] Arguments = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
         String errormessage = "Too many command line arguments";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
 
@@ -127,11 +132,29 @@ public class Project2Test extends InvokeMainTestCase{
         String errormessage = "This program takes in arguments to create an airline";
         InvokeMainWithArgsMatchForStdOut(Arguments, errormessage);
     }
-    @Ignore
+
+
     @Test
-    public void testOnlyTextFileArgs(){
-        String[] Arguments = {"-textFile", "parser.txt"};
-        String errormessage = "parser.txt";
+    public void testMisMatchedAirline(){
+        String [] Arguments2 = {"-print", "-textFile", "output.txt",
+                "alaska", "123", "PDX", "03/15/2014 10:39", "ALA",  "03/02/2014 01:35"};
+        MainMethodResult result = invokeMain(Arguments2);
+
+        String [] Arguments = {"-print", "-textFile", "output.txt",
+                "derp", "123", "PDX", "03/15/2014 10:39", "ALA",  "03/02/2014 01:35"};
+        String errormessage = "Wrong file";
+        InvokeMainWithArgsCheckForErrorMessage(Arguments,errormessage);
+    }
+
+    @Test
+    public void testNewFileIsCreatedIfNotExist(){
+        String [] Arguments = {"-print", "-textFile", "output2.txt",
+                "united", "123", "PDX", "03/15/2014 10:39", "ALA",  "03/02/2014 01:35"};
+        String errormessage = "Could not find file";
         InvokeMainWithArgsMatchForStdOut(Arguments,errormessage);
+        File file = new File("output2.txt");
+        if(file.delete()){
+            System.out.println(file.getName() + " deleted");
+        }
     }
 }

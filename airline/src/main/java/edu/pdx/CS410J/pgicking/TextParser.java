@@ -21,8 +21,16 @@ public class TextParser implements AirlineParser {
     public AbstractAirline parse() throws ParserException {
         TextDumper dumper = new TextDumper(File);
 
-        System.out.println(File);
+        //System.out.println(File);
         File f = new java.io.File(File);
+
+        if(!f.exists()){
+            try {
+                dumper.dump(airline);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         FileReader reader = null;
         try {
@@ -32,15 +40,7 @@ public class TextParser implements AirlineParser {
         }
         BufferedReader in = new BufferedReader(reader);
 
-        if(!f.exists()){
-            System.out.println("Could not find file: " + File + "" +
-                    "\nCreating: " + File);
-            try {
-                dumper.dump(airline);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+
         if(f.exists()){
             //read only the first line, hopefully the airline name is in it
             String fileAirline = null;
@@ -49,7 +49,7 @@ public class TextParser implements AirlineParser {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(airline.Name != fileAirline){
+            if(!airline.Name.equals(fileAirline)){
                 System.err.print("Wrong file. Airline: " + airline.getName() + "" +
                         " does not match: " + fileAirline);
                 System.err.print("\nYou can only add new flights to the same airline");
@@ -58,10 +58,27 @@ public class TextParser implements AirlineParser {
             else{
                 //Read airline flights and print if needed
                 String dummy;
+                String[] split;
+                int flightNum;
                 try {
                     while((dummy = in.readLine()) != null) {
-
+                        //System.out.println(dummy);
+                        split = dummy.split(" ");
+                        split[3] += " " + split[4];
+                        split[4] = split[5];
+                        split[5] = "";
+                        split[5] += split[6] + " " + split[7];
+                        split = removeAt(6,split);
+                        split = removeAt(6,split);
+                        flightNum = Integer.parseInt(split[1]);
+                        CreateFlight(split,flightNum);
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    dumper.dump(airline);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -70,5 +87,26 @@ public class TextParser implements AirlineParser {
 
 
         return null;
+    }
+
+    public void CreateFlight(String [] args, int flightNum){
+        String name = args[0];
+        String src = args[2];
+        String Depart = args[3];
+        String dest = args[4];
+        String Arrive = args[5];
+
+        Flight flight = new Flight(flightNum,src,Depart,dest,Arrive);
+        airline.addFlight(flight);
+    }
+
+    //Blatantly copied from
+    //http://stackoverflow.com/questions/2777762/shorten-array-length-once-element-is-remove-in-java
+    static String[] removeAt(int k, String[] arr) {
+        final int L = arr.length;
+        String[] ret = new String[L - 1];
+        System.arraycopy(arr, 0, ret, 0, k);
+        System.arraycopy(arr, k + 1, ret, k, L - k - 1);
+        return ret;
     }
 }
