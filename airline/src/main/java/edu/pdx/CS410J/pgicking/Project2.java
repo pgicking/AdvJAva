@@ -3,11 +3,27 @@ package edu.pdx.CS410J.pgicking;
 import edu.pdx.cs410J.AbstractAirline;
 import edu.pdx.cs410J.ParserException;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+
 /**
  * Created by pgicking on 7/12/14.
  */
 public class Project2 {
 
+    /**
+     * Does the brunt of the work for project2, it is almost exactly the same
+     * as my project1 with a couple midifications. I kept it this way so adding flights
+     * is verified through the main so no malformed strings should (knock on wood) show up in
+     * the file unless the user edits it themselves. I added a check for it just in case anyway.
+     *
+     * It calls parser to parse the file and add its flights to the flight list then
+     * display them if the user specifies -print. OTherwise it has the same functionality as
+     * project 1
+     *
+     * @param args Command line arguments containing a flight to add
+     */
     public static void main(String[] args){
       /*
       name The name of the airline
@@ -72,7 +88,7 @@ public class Project2 {
         dest = args[4+indx];
         Arrive = ValidateArrivalString(args[5 + indx]);
 
-        Airline airline = new Airline(name);
+        AbstractAirline airline = new Airline(name);
 
         Flight flight = new Flight(number,src,dest,Depart,Arrive);
 
@@ -89,14 +105,27 @@ public class Project2 {
         }
 
         if(Display == 1) {
-            print = airline.toString();
-
-            System.out.println(print);
+            Collection p = airline.getFlights();
+            //print = airline.toString();
+            System.out.println(airline.getName());
+            Iterator itr = p.iterator();
+            while(itr.hasNext()) {
+                Object s = itr.next();
+                System.out.println(s);
+            }
         }
 
         System.exit(0);
     }
 
+    /**
+     * Gets the name of the file in a hacky way. It assumes that
+     * the file name is the next argument after -textFile, grabs that
+     * and returns it
+     *
+     * @param args Command line string
+     * @return The file name
+     */
     private static String parseFileName(String [] args){
         String fileName = null;
         int i = 0;

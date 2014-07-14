@@ -16,8 +16,18 @@ public class TextDumper implements AirlineDumper{
         this.fileName = fileName;
     }
 
+    /**
+     * Dump the contents of an airline to a textfile
+     *
+     * @param abstractAirline Airline which dumps its flights to a textfile
+     * @throws IOException
+     */
     @Override
     public void dump(AbstractAirline abstractAirline) throws IOException {
+        if(!fileName.contains(".txt")){
+            System.err.print("File must be a .txt");
+            System.exit(1);
+        }
         File f = new java.io.File(fileName);
 
         if(!f.exists()) {
@@ -56,7 +66,7 @@ public class TextDumper implements AirlineDumper{
             }
             else{
                 //PrintWriter writer = new PrintWriter(fileName, "UTF-8");
-                System.out.println("Attempting to append to " + fileName);
+                System.out.println("Appending to " + fileName);
                 PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
                 writer.println(abstractAirline.toString());
                 writer.close();

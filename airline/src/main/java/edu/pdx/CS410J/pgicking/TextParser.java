@@ -11,14 +11,25 @@ import java.io.*;
  */
 public class TextParser implements AirlineParser {
     String File;
-    Airline airline;
-    public TextParser(String fileName, Airline airline) {
+    AbstractAirline airline;
+    public TextParser(String fileName, AbstractAirline airline) {
         this.File = fileName;
         this.airline = airline;
     }
 
+    /**
+     * Parses the text file for data and adds the flights to the flight list
+     * Then can print them out or do nothing.
+     *
+     * @return the airline which can be displayed
+     * @throws ParserException
+     */
     @Override
     public AbstractAirline parse() throws ParserException {
+        if(!File.contains(".txt")){
+            System.err.print("File must be a .txt");
+            System.exit(1);
+        }
         TextDumper dumper = new TextDumper(File);
 
         //System.out.println(File);
@@ -49,7 +60,7 @@ public class TextParser implements AirlineParser {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(!airline.Name.equals(fileAirline)){
+            if(!airline.getName().equals(fileAirline)){
                 System.err.print("Wrong file. Airline: " + airline.getName() + "" +
                         " does not match: " + fileAirline);
                 System.err.print("\nYou can only add new flights to the same airline");
@@ -59,11 +70,18 @@ public class TextParser implements AirlineParser {
                 //Read airline flights and print if needed
                 String dummy;
                 String[] split;
+                String[] test = {"1", "2", "3", "4", "5","6","7","8"};
                 int flightNum;
                 try {
                     while((dummy = in.readLine()) != null) {
                         //System.out.println(dummy);
                         split = dummy.split(" ");
+                        if(test.length != split.length){
+                            System.out.println(test.length);
+                            System.out.println(split.length);
+                            System.err.print("Textfile might be malformed");
+                            System.exit(1);
+                        }
                         split[3] += " " + split[4];
                         split[4] = split[5];
                         split[5] = "";
@@ -86,9 +104,16 @@ public class TextParser implements AirlineParser {
         }
 
 
-        return null;
+        return airline;
     }
 
+    /**
+     * Creates a flight similar in the way Project2 main does. If I was smart I'd have
+     * project2 main refer to this function
+     *
+     * @param args     Contains the data to be assigned to fields to add to flights
+     * @param flightNum Casted to a number and passed in
+     */
     public void CreateFlight(String [] args, int flightNum){
         String name = args[0];
         String src = args[2];
@@ -102,6 +127,13 @@ public class TextParser implements AirlineParser {
 
     //Blatantly copied from
     //http://stackoverflow.com/questions/2777762/shorten-array-length-once-element-is-remove-in-java
+
+    /**
+     *
+     * @param k     Index to remove from
+     * @param arr   String to be shortened
+     * @return      The string
+     */
     static String[] removeAt(int k, String[] arr) {
         final int L = arr.length;
         String[] ret = new String[L - 1];

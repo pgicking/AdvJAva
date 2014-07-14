@@ -157,4 +157,20 @@ public class Project2Test extends InvokeMainTestCase{
             System.out.println(file.getName() + " deleted");
         }
     }
+
+    @Test
+    public void testTextFileIncorrectFormat(){
+        String [] Arguments = {"-print", "-textFile", "output",
+                "alaska", "123", "PDX", "03/15/2014 10:39", "ALA",  "03/02/2014 01:35"};
+        String errormessage = "File must be a .txt";
+        InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
+    }
+
+    @Test
+    public void testMalformedTextFiles(){
+        String [] Arguments = {"-print", "-textFile", "output3.txt",
+                "alaska", "123", "PDX", "03/15/2014 10:39", "ALA",  "03/02/2014 01:35"};
+        String errormessage = "Textfile might be malformed";
+        InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
+    }
 }
