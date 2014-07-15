@@ -5,7 +5,6 @@ import edu.pdx.cs410J.ParserException;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 /**
  * Created by pgicking on 7/12/14.
@@ -14,12 +13,12 @@ public class Project2 {
 
     /**
      * Does the brunt of the work for project2, it is almost exactly the same
-     * as my project1 with a couple midifications. I kept it this way so adding flights
+     * as my project1 with a couple modifications. I kept it this way so adding flights
      * is verified through the main so no malformed strings should (knock on wood) show up in
      * the file unless the user edits it themselves. I added a check for it just in case anyway.
      *
      * It calls parser to parse the file and add its flights to the flight list then
-     * display them if the user specifies -print. OTherwise it has the same functionality as
+     * display them if the user specifies -print. Otherwise it has the same functionality as
      * project 1
      *
      * @param args Command line arguments containing a flight to add
@@ -205,8 +204,9 @@ public class Project2 {
         }
         return number;
     }
+
     /**
-     *Displays the readme if -README is passed in as an argument, ignoring all other arguments
+     * Displays the readme if -README is passed in as an argument, ignoring all other arguments
      */
     private static void DisplayREADME() {
         System.out.println("This program takes in arguments to create an airline" +
