@@ -45,7 +45,7 @@ public class Project2Test extends InvokeMainTestCase{
     }
     @Test
     public void testTooManyArguments(){
-        String [] Arguments = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
+        String [] Arguments = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"};
         String errormessage = "Too many command line arguments";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
 
@@ -53,28 +53,28 @@ public class Project2Test extends InvokeMainTestCase{
 
     @Test
     public void testBadFlightNumber(){
-        String [] Arguments = {"-print", "alaska", "q123", "PDX", "3/15/2014 10:39", "ALA", "03/2/14 1:35"};
+        String [] Arguments = {"-print", "alaska", "q123", "PDX", "3/15/2014", "10:39", "ALA", "03/2/14", "1:35"};
         String errormessage = "Flight number is invalid";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }
 
     @Test
     public void testAirportCodesLargerThanThree(){
-        String [] Arguments = {"-print", "alaska", "123", "PDXXXXXXX", "3/15/2014 10:39", "ALAXXX", "03/2/14 1:35"};
+        String [] Arguments = {"-print", "alaska", "123", "PDXXXXXXX", "3/15/2014", "10:39", "ALAXXX", "03/2/14", "1:35"};
         String errormessage = "Source or Destination airport codes are larger than 3 letters";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }
 
     @Test
     public void testAirportCodesSmallerThanThree(){
-        String [] Arguments = {"-print", "alaska", "123", "PX", "3/15/2014 10:39", "AL", "03/2/14 1:35"};
+        String [] Arguments = {"-print", "alaska", "123", "PX", "3/15/2014", "10:39", "AL", "03/2/14 1:35"};
         String errormessage = "Source or Destination airport codes are less than 3 letters";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }
 
     @Test
     public void testWrongDateFormatShortYear(){
-        String[] Arguments = {"-print", "alaska", "123", "PDX", "3/15/2014 10:39", "ALA", "03/2/14 1:35"};
+        String[] Arguments = {"-print", "alaska", "123", "PDX", "3/15/2014", "10:39", "ALA", "03/2/14", "1:35"};
         String errormessage = "is not a valid date/time format!";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }
@@ -86,7 +86,7 @@ public class Project2Test extends InvokeMainTestCase{
 
     @Test
     public void testWrongDateFormatDashes(){
-        String[] Arguments = {"-print", "alaska", "123", "PDX", "3-15-2014 10:39", "ALA", "03/2/2014 1:35"};
+        String[] Arguments = {"-print", "alaska", "123", "PDX", "3-15-2014", "10:39", "ALA", "03/2/2014", "1:35"};
         String errormessage = "is not a valid date/time format!";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }
@@ -94,14 +94,14 @@ public class Project2Test extends InvokeMainTestCase{
 
     @Test
     public void testDateFormat(){
-        String[] Arguments = {"-print", "alaska", "123", "PDX", "03/15/2014 10:39", "ALA", "03/02/2014 01:35"};
+        String[] Arguments = {"-print", "alaska", "123", "PDX", "03/15/2014", "10:39", "ALA", "03/02/2014", "01:35"};
         MainMethodResult result = invokeMain(Arguments);
         assertEquals(result.getExitCode().intValue(), 0);
     }
 
     @Test
     public void testREADMEWithPrintAtStart(){
-        String[] Arguments = {"-print", "alaska", "123", "PDX", "3/15/2014 10:39", "ALA", "03/2/2014 1:35", "-README"};
+        String[] Arguments = {"-print", "alaska", "123", "PDX", "3/15/2014", "10:39", "ALA", "03/2/2014", "1:35", "-README"};
         String errormessage = "This program takes in arguments to create an airline";
         InvokeMainWithArgsMatchForStdOut(Arguments, errormessage);
     }
@@ -113,20 +113,20 @@ public class Project2Test extends InvokeMainTestCase{
 
     @Test
     public void testREADMEWithPrintAtEnd(){
-        String[] Arguments = {"alaska", "123", "PDX", "3/15/2014 10:39", "ALA", "03/2/2014 1:35", "-README", "-print"};
+        String[] Arguments = {"alaska", "123", "PDX", "3/15/2014", "10:39", "ALA", "03/2/2014", "1:35", "-README", "-print"};
         String errormessage = "This program takes in arguments to create an airline";
         InvokeMainWithArgsMatchForStdOut(Arguments, errormessage);
     }
 
     @Test
     public void testREADMEAtEndWithNoPrint(){
-        String[] Arguments = {"alaska", "123", "PDX", "3/15/2014 10:39", "ALA", "03/2/2014 1:35", "-README"};
+        String[] Arguments = {"alaska", "123", "PDX", "3/15/2014", "10:39", "ALA", "03/2/2014", "1:35", "-README"};
         String errormessage = "This program takes in arguments to create an airline";
         InvokeMainWithArgsMatchForStdOut(Arguments, errormessage);
     }
     @Test
     public void testREADMEAtStartWithNoPrint(){
-        String[] Arguments = {"-README", "alaska", "123", "PDX", "3/15/2014 10:39", "ALA", "03/2/2014 1:35"};
+        String[] Arguments = {"-README", "alaska", "123", "PDX", "3/15/2014", "10:39", "ALA", "03/2/2014", "1:35"};
         String errormessage = "This program takes in arguments to create an airline";
         InvokeMainWithArgsMatchForStdOut(Arguments, errormessage);
     }
@@ -135,11 +135,11 @@ public class Project2Test extends InvokeMainTestCase{
     @Test
     public void testMisMatchedAirline(){
         String [] Arguments2 = {"-print", "-textFile", "output.txt",
-                "alaska", "123", "PDX", "03/15/2014 10:39", "ALA",  "03/02/2014 01:35"};
+                "alaska", "123", "PDX", "03/15/2014", "10:39", "ALA",  "03/02/2014", "01:35"};
         MainMethodResult result = invokeMain(Arguments2);
 
         String [] Arguments = {"-print", "-textFile", "output.txt",
-                "derp", "123", "PDX", "03/15/2014 10:39", "ALA",  "03/02/2014 01:35"};
+                "derp", "123", "PDX", "03/15/2014", "10:39", "ALA",  "03/02/2014", "01:35"};
         String errormessage = "Wrong file";
         InvokeMainWithArgsCheckForErrorMessage(Arguments,errormessage);
     }
@@ -147,7 +147,7 @@ public class Project2Test extends InvokeMainTestCase{
     @Test
     public void testNewFileIsCreatedIfNotExist(){
         String [] Arguments = {"-print", "-textFile", "output2.txt",
-                "united", "123", "PDX", "03/15/2014 10:39", "ALA",  "03/02/2014 01:35"};
+                "united", "123", "PDX", "03/15/2014", "10:39", "ALA",  "03/02/2014", "01:35"};
         String errormessage = "Could not find file";
         InvokeMainWithArgsMatchForStdOut(Arguments,errormessage);
         File file = new File("output2.txt");
@@ -159,16 +159,15 @@ public class Project2Test extends InvokeMainTestCase{
     @Test
     public void testTextFileIncorrectFormat(){
         String [] Arguments = {"-print", "-textFile", "output",
-                "alaska", "123", "PDX", "03/15/2014 10:39", "ALA",  "03/02/2014 01:35"};
+                "alaska", "123", "PDX", "03/15/2014", "10:39", "ALA",  "03/02/2014", "01:35"};
         String errormessage = "File must be a .txt";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }
 
-    @Ignore //temporary ignore
     @Test
     public void testMalformedTextFiles(){
         String [] Arguments = {"-print", "-textFile", "output3.txt",
-                "alaska", "123", "PDX", "03/15/2014 10:39", "ALA",  "03/02/2014 01:35"};
+                "alaska", "123", "PDX", "03/15/2014", "10:39", "ALA",  "03/02/2014", "01:35"};
         String errormessage = "Textfile might be malformed";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }

@@ -7,6 +7,9 @@ import edu.pdx.cs410J.ParserException;
 
 import java.io.*;
 
+import static edu.pdx.CS410J.pgicking.Project2.ValidateArrivalString;
+import static edu.pdx.CS410J.pgicking.Project2.ValidateDepartureString;
+
 /**
  * Created by pgicking on 7/12/14.
  */
@@ -84,12 +87,12 @@ public class TextParser implements AirlineParser {
                             System.err.print("Textfile might be malformed");
                             System.exit(1);
                         }
-                        split[3] += " " + split[4];
-                        split[4] = split[5];
-                        split[5] = "";
-                        split[5] += split[6] + " " + split[7];
-                        split = removeAt(6,split);
-                        split = removeAt(6,split);
+                        //split[3] += " " + split[4];
+                        //split[4] = split[5];
+                        //split[5] = "";
+                        //split[5] += split[6] + " " + split[7];
+                        //split = removeAt(6,split);
+                        //split = removeAt(6,split);
                         flightNum = Integer.parseInt(split[1]);
                         CreateFlight(split,flightNum);
                     }
@@ -117,19 +120,28 @@ public class TextParser implements AirlineParser {
      * @param flightNum Casted to a number and passed in
      */
     public void CreateFlight(String [] args, int flightNum){
+        String dummy;
+
         String name = args[0];
         String src = args[2];
-        String Depart = args[3];
-        String dest = args[4];
-        String Arrive = args[5];
+        dummy = args[3] + " " + args[4];
+        String Depart = ValidateDepartureString(dummy);
+        String dest = args[5];
+        try {
+            dummy = args[6] + " " + args[7];
+        } catch (Exception e) {
+            System.err.print("Missing Command line arguments." +
+                    "\nCheck to make sure you have a departure date and time\n");
+        }
+        String Arrive = ValidateArrivalString(dummy);
 
         Flight flight = new Flight(flightNum,src,Depart,dest,Arrive);
         airline.addFlight(flight);
     }
 
+
     //Blatantly copied from
     //http://stackoverflow.com/questions/2777762/shorten-array-length-once-element-is-remove-in-java
-
     /**
      * Removes an element from an String array and then shortens the
      * array to the new length instead of leaving an empty element

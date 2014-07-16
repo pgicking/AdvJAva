@@ -75,13 +75,11 @@ public class Project1 {
           ++i;
       }
 
-      if(args[2+indx].length() > 3 || args[5+indx].length() > 3){
-          System.out.println(args[2+indx]);
-          System.out.println(args[4+indx]);
+      if(args[2+indx].length() > 3 || args[4+indx].length() > 3){
           System.err.println("Source or Destination airport codes are larger than 3 letters");
           System.exit(1);
       }
-      if(args[2+indx].length() < 3 || args[5+indx].length() < 3){
+      if(args[2+indx].length() < 3 || args[4+indx].length() < 3){
           System.err.println("Source or Destination airport codes are less than 3 letters");
           System.exit(1);
       }

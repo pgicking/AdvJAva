@@ -45,6 +45,7 @@ public class Project2 {
         int Display = 0; //Display flag
         int indx = 0;
         int i = 0;
+        String dummy;
         Class c = AbstractAirline.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
 
         for (String arg : args) {
@@ -71,11 +72,11 @@ public class Project2 {
         }
             ValidateArgsLength(args);
 
-        if(args[2+indx].length() > 3 || args[4+indx].length() > 3){
+        if(args[2+indx].length() > 3 || args[5+indx].length() > 3){
             System.err.println("Source or Destination airport codes are larger than 3 letters");
             System.exit(1);
         }
-        if(args[2+indx].length() < 3 || args[4+indx].length() < 3){
+        if(args[2+indx].length() < 3 || args[5+indx].length() < 3){
             System.err.println("Source or Destination airport codes are less than 3 letters");
             System.exit(1);
         }
@@ -83,9 +84,16 @@ public class Project2 {
         name = args[indx];
         number = ValidateFlightNumber(args[1+indx]);
         src = args[2+indx];
-        Depart = ValidateDepartureString(args[3 + indx]);
+        dummy = args[3+indx] + " " + args[4+indx];
+        Depart = ValidateDepartureString(dummy);
         dest = args[4+indx];
-        Arrive = ValidateArrivalString(args[5 + indx]);
+        try {
+            dummy = args[6 + indx] + " " + args[7 + indx];
+        } catch (Exception e) {
+            System.err.print("Missing Command line arguments." +
+                    "\nCheck to make sure you have a departure date and time\n");
+        }
+        Arrive = ValidateArrivalString(dummy);
 
         AbstractAirline airline = new Airline(name);
 
@@ -151,7 +159,7 @@ public class Project2 {
             System.err.println("Missing command line arguments");
             System.exit(1);
         }
-        if(args.length > 10){
+        if(args.length > 12){
             System.err.println("Too many command line arguments");
             System.exit(1);
         }
@@ -162,7 +170,7 @@ public class Project2 {
      @param    arg     The index of the arguments containing arrival string
      @return   The validated arrival string
      */
-    private static String ValidateArrivalString(String arg) {
+    public static String ValidateArrivalString(String arg) {
         if(!arg.matches("^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\\d\\d ([01]?[0-9]|2[0-3]):[0-5][0-9]")){
             System.err.println("\n"+ arg + " is not a valid date/time format!\n" +
                     "Correct format is: MM/DD/YYYY HH:MM" +
@@ -178,7 +186,7 @@ public class Project2 {
      @param    arg    The index of the arguments containing departure string
      @return   The validated departure string
      */
-    private static String ValidateDepartureString(String arg) {
+    public static String ValidateDepartureString(String arg) {
         if(!arg.matches("^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\\d\\d ([01]?[0-9]|2[0-3]):[0-5][0-9]")){
             System.err.println("\n"+ arg + " is not a valid date/time format!\n" +
                     "Correct format is: MM/DD/YYYY HH:MM" +
