@@ -12,6 +12,7 @@ import java.io.*;
 public class TextParser implements AirlineParser {
     String File;
     AbstractAirline airline;
+
     public TextParser(String fileName, AbstractAirline airline) {
         this.File = fileName;
         this.airline = airline;
@@ -77,8 +78,8 @@ public class TextParser implements AirlineParser {
                         //System.out.println(dummy);
                         split = dummy.split(" ");
                         if(test.length != split.length){
-                            System.out.println(test.length);
-                            System.out.println(split.length);
+                            //System.out.println(test.length);
+                            //System.out.println(split.length);
                             System.err.print("Textfile might be malformed");
                             System.exit(1);
                         }

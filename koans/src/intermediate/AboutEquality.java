@@ -1,6 +1,9 @@
 package intermediate;
 
 import com.sandwich.koan.Koan;
+
+import java.io.UnsupportedEncodingException;
+
 import static com.sandwich.koan.constant.KoanConstants.__;
 import static com.sandwich.util.Assert.assertEquals;
 
@@ -43,8 +46,8 @@ public class AboutEquality {
                 return false;
             boolean b = ((Car) other).horsepower == this.horsepower;
             boolean b2 = ((Car) other).name.equals(this.name);
-            System.out.println(other);
-            System.out.println(this);
+            //System.out.println(other);
+            //System.out.println(this);
             return b && b2;
 			// Change this implementation to match the equals contract
 			// Car objects with same horsepower and name values should be considered equal
@@ -53,9 +56,21 @@ public class AboutEquality {
 		
 		@Override
 		public int hashCode() {
-			// see koan ownHashCode
-			return super.hashCode();
-		}
+            // see koan ownHashCode
+            byte[] bytes = new byte[0];
+            int hash = 0;
+            try {
+                bytes = name.getBytes("US-ASCII");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            int hash_2 = horsepower * 31;
+            for(int i = 0; i < bytes.length; ++i){
+                hash += bytes[i];
+            }
+            return hash * hash_2;
+            //return super.hashCode();
+        }
 	}
 	@Koan 
 	public void equalForOwnObjects() {
@@ -100,7 +115,7 @@ public class AboutEquality {
 		Car car1 = new Car("Beetle", 50);
 		Car car2 = new Car("Beetle", 50);
 		assertEquals(car1.equals(car2), true);
-		assertEquals(car1.hashCode() == car2.hashCode(), false);
+		assertEquals(car1.hashCode() == car2.hashCode(), true);
 	}
 	
 	static class Chicken {
@@ -121,8 +136,8 @@ public class AboutEquality {
 	public void ownHashCodeImplementationPartTwo() {
 		Chicken chicken1 = new Chicken(); chicken1.color = "black";
 		Chicken chicken2 = new Chicken();
-		assertEquals(chicken1.equals(chicken2), __);
-		assertEquals(chicken1.hashCode() == chicken2.hashCode(), __);
+		assertEquals(chicken1.equals(chicken2), false);
+		assertEquals(chicken1.hashCode() == chicken2.hashCode(), true);
 		// Does this still fit the hashCode contract? Why?
 		// If it's valid why is this still not a good idea?
 	}

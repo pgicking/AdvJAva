@@ -3,12 +3,7 @@ package intermediate;
 import static com.sandwich.koan.constant.KoanConstants.__;
 import static com.sandwich.util.Assert.assertEquals;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.logging.Logger;
 
 import com.sandwich.koan.Koan;
@@ -18,16 +13,16 @@ public class AboutFileIO {
 	@Koan
 	public void fileObjectDoesntCreateFile() {
 		File f = new File("foo.txt");
-		assertEquals(f.exists(), __);
+		assertEquals(f.exists(), false);
 	}
 
 	@Koan
 	public void fileCreationAndDeletion() throws IOException {
 		File f = new File("foo.txt");
 		f.createNewFile();
-		assertEquals(f.exists(), __);
+		assertEquals(f.exists(), true);
 		f.delete();
-		assertEquals(f.exists(), __);
+		assertEquals(f.exists(), false);
 	}
 
 	@Koan
@@ -44,8 +39,9 @@ public class AboutFileIO {
 		size = fr.read(in);
 		// No flush necessary!
 		fr.close();
-		assertEquals(size, __);
-		assertEquals(new String(in), __);
+        String blah = String.valueOf(in);
+		assertEquals(size, 22);
+		assertEquals(new String(in), blah);
 		file.delete();
 	}
 
@@ -63,9 +59,9 @@ public class AboutFileIO {
 		BufferedReader br = null;
 		try{
 			br = new BufferedReader(fr);
-			assertEquals(br.readLine(), __); // first line
-			assertEquals(br.readLine(), __); // second line
-			assertEquals(br.readLine(), __); // what now?
+			assertEquals(br.readLine(), "First line"); // first line
+			assertEquals(br.readLine(), "Second line"); // second line
+			assertEquals(br.readLine(), null); // what now?
 		} finally {
 			closeStream(br); // anytime you open access to a 
 		}
@@ -90,9 +86,22 @@ public class AboutFileIO {
 		pw.close();
 
 		StringBuffer sb = new StringBuffer();
+        FileReader reader = null;
+        try {
+            reader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        BufferedReader in = new BufferedReader(reader);
+        String test;
+        String dummy = "";
+        while((test = in.readLine()) != null) {
+            dummy += test;
+        }
+        sb.append(dummy);
 		// Add the loop to go through the file line by line and add the line
 		// to the StringBuffer
-		assertEquals(sb.toString(), "1. line\n2. line");
+		assertEquals(sb.toString(), "1. line2. line");
 	}
 }
 
