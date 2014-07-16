@@ -2,6 +2,8 @@ package edu.pdx.CS410J.pgicking;
 
 import edu.pdx.cs410J.AbstractAirline;
 import edu.pdx.cs410J.AbstractFlight;
+import edu.pdx.CS410J.pgicking.Airline;
+import edu.pdx.CS410J.pgicking.Flight;
 
 /**
  * @author Peter Gicking
@@ -30,7 +32,7 @@ public class Project1 {
         System.err.println("Missing command line arguments");
         System.exit(1);
     }
-    if(args.length > 8){
+    if(args.length > 9){
         System.err.println("Too many command line arguments");
         System.exit(1);
     }
@@ -52,6 +54,8 @@ public class Project1 {
       int Display = 0; //Display flag
       int indx = 0;
       int i = 0;
+      String realArgs;
+      String dummy;
 
       for (String arg : args) {
           if(arg.contains("-README")){
@@ -70,11 +74,14 @@ public class Project1 {
           //System.out.println(indx);
           ++i;
       }
-      if(args[2+indx].length() > 3 || args[4+indx].length() > 3){
+
+      if(args[2+indx].length() > 3 || args[5+indx].length() > 3){
+          System.out.println(args[2+indx]);
+          System.out.println(args[4+indx]);
           System.err.println("Source or Destination airport codes are larger than 3 letters");
           System.exit(1);
       }
-      if(args[2+indx].length() < 3 || args[4+indx].length() < 3){
+      if(args[2+indx].length() < 3 || args[5+indx].length() < 3){
           System.err.println("Source or Destination airport codes are less than 3 letters");
           System.exit(1);
       }
@@ -82,9 +89,16 @@ public class Project1 {
       name = args[indx];
       number = ValidateFlightNumber(args[1+indx]);
       src = args[2+indx];
-      Depart = ValidateDepartureString(args[3 + indx]);
+      dummy = args[3+indx] + " " + args[4+indx];
+      Depart = ValidateDepartureString(dummy);
       dest = args[4+indx];
-      Arrive = ValidateArrivalString(args[5 + indx]);
+      try {
+          dummy = args[6 + indx] + " " + args[7 + indx];
+      } catch (Exception e) {
+          System.err.print("Missing Command line arguments." +
+                  "\nCheck to make sure you have a departure date and time\n");
+      }
+      Arrive = ValidateArrivalString(dummy);
 
       Airline airline = new Airline(name);
 
@@ -157,7 +171,7 @@ public class Project1 {
                 "departTime: Departure date and time (24-hour time)\n" +
                 "dest: Three-letter code of arrival airport\n" +
                 "arriveTime: Arrival date and time (24-hour time)\n" +
-                "Example command line string alaska 123 PDX \"3/15/2014 10:39\" ALA \"03/2/2014 1:35\"");
+                "Example command line string alaska 123 PDX 3/15/2014 10:39 ALA 03/2/2014 1:35");
         System.exit(0);
     }
 
