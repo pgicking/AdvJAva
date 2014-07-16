@@ -1,4 +1,4 @@
-package edu.pdx.CS410J.pgicking;
+package edu.pdx.cs410J.pgicking;
 
 import edu.pdx.cs410J.AbstractAirline;
 import edu.pdx.cs410J.AirlineDumper;

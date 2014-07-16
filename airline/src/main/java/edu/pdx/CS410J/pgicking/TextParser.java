@@ -1,4 +1,4 @@
-package edu.pdx.CS410J.pgicking;
+package edu.pdx.cs410J.pgicking;
 
 import edu.pdx.cs410J.AbstractAirline;
 import edu.pdx.cs410J.AirlineParser;
@@ -130,6 +130,8 @@ public class TextParser implements AirlineParser {
     //http://stackoverflow.com/questions/2777762/shorten-array-length-once-element-is-remove-in-java
 
     /**
+     * Removes an element from an String array and then shortens the
+     * array to the new length instead of leaving an empty element
      *
      * @param k     Index to remove from
      * @param arr   String to be shortened
