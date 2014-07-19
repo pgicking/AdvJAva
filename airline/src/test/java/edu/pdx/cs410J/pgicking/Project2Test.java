@@ -31,6 +31,15 @@ public class Project2Test extends InvokeMainTestCase{
     }
 
     @Test
+    public void testNoPrint(){
+        String[] Arguments = {"alaska", "123", "PDX", "03/15/2014", "10:39", "ALA", "03/02/2014", "01:35"};
+        MainMethodResult result = invokeMain(Arguments);
+        System.out.println(result.getOut());
+        System.out.println(result.getErr());
+        assertEquals(result.getExitCode().intValue(), 0);
+    }
+
+    @Test
     public void testREADMEOnly(){
         String [] Arguments = {"-README"};
         String errormessage = "This program takes in arguments to create an airline";
@@ -67,7 +76,7 @@ public class Project2Test extends InvokeMainTestCase{
 
     @Test
     public void testAirportCodesSmallerThanThree(){
-        String [] Arguments = {"-print", "alaska", "123", "PX", "3/15/2014", "10:39", "AL", "03/2/14 1:35"};
+        String [] Arguments = {"-print", "alaska", "123", "PX", "3/15/2014", "10:39", "AL", "03/2/14", "1:35"};
         String errormessage = "Source or Destination airport codes are less than 3 letters";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }
@@ -75,19 +84,20 @@ public class Project2Test extends InvokeMainTestCase{
     @Test
     public void testWrongDateFormatShortYear(){
         String[] Arguments = {"-print", "alaska", "123", "PDX", "3/15/2014", "10:39", "ALA", "03/2/14", "1:35"};
-        String errormessage = "is not a valid date/time format!";
+        String errormessage = "is not a valid";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }
 
     private void InvokeMainWithArgsCheckForErrorMessage(String[] arguments, String errormessage) {
         MainMethodResult result = invokeMain(arguments);
+        System.out.println(result.getOut());
         assertTrue(result.getErr().contains(errormessage));
     }
 
     @Test
     public void testWrongDateFormatDashes(){
         String[] Arguments = {"-print", "alaska", "123", "PDX", "3-15-2014", "10:39", "ALA", "03/2/2014", "1:35"};
-        String errormessage = "is not a valid date/time format!";
+        String errormessage = "is not a valid";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }
 
@@ -96,6 +106,8 @@ public class Project2Test extends InvokeMainTestCase{
     public void testDateFormat(){
         String[] Arguments = {"-print", "alaska", "123", "PDX", "03/15/2014", "10:39", "ALA", "03/02/2014", "01:35"};
         MainMethodResult result = invokeMain(Arguments);
+        System.out.println(result.getOut());
+        System.out.println(result.getErr());
         assertEquals(result.getExitCode().intValue(), 0);
     }
 

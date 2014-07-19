@@ -68,6 +68,7 @@ public class TextDumper implements AirlineDumper{
                 //PrintWriter writer = new PrintWriter(fileName, "UTF-8");
                 System.out.println("Appending to " + fileName);
                 PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
+                System.out.println("Writng: " + abstractAirline.toString());
                 writer.println(abstractAirline.toString());
                 writer.close();
             }

@@ -11,6 +11,10 @@ import java.util.Iterator;
  */
 public class Project2 {
 
+    private static int Display = 0;
+    private static int indx = 0;
+    private static int parseFlag = 0;
+
     /**
      * Does the brunt of the work for project2, it is almost exactly the same
      * as my project1 with a couple modifications. I kept it this way so adding flights
@@ -32,61 +36,69 @@ public class Project2 {
       dest Three-letter code of arrival airport
       arriveTime Arrival date and time (24-hour time)
       */
-        String name = null;
-        int number;
-        String src = null;
-        String dest = null;
-        String Depart = null;
-        String Arrive = null;
-        String print;
-        String fileName;
-        String cla = null;
-        int parseFlag = 0;
-        int Display = 0; //Display flag
-        int indx = 0;
-        int i = 0;
-        String dummy;
+
         Class c = AbstractAirline.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
 
-        for (String arg : args) {
-            if(arg.contains("-README")){
-                DisplayREADME();
-            }
-            //System.out.println(arg);
-            //System.out.println(arg.contains("-print"));
-            if(arg.contains("-print")){
-                Display = 1;
-                //If -print is at beginning, offset indx by one
-                //otherwise, offset index by zero
-                if(arg.compareTo("-print") == 0 && i == 0){
-                    indx += 1;
-                }
-            }
-            if(arg.contains("-textFile")){
-                indx += 2;
-                parseFlag = 1;
+        System.out.println(parseFlag + " " + Display);
+        parseArgs(args);
 
-            }
-            //System.out.println(indx);
-            ++i;
-        }
-            ValidateArgsLength(args);
+        System.out.println(parseFlag);
+        ValidateArgsLength(args);
 
-        if(args[2+indx].length() > 3 || args[5+indx].length() > 3){
-            System.err.println("Source or Destination airport codes are larger than 3 letters");
-            System.exit(1);
+        System.out.println(parseFlag);
+        ValidateAirportCodes(args);
+
+        System.out.println(parseFlag);
+        AbstractAirline airline = AssignArgs(args);
+
+        System.out.println(parseFlag);
+        if(parseFlag == 1) {
+            ParseFile(args, airline);
         }
-        if(args[2+indx].length() < 3 || args[5+indx].length() < 3){
-            System.err.println("Source or Destination airport codes are less than 3 letters");
-            System.exit(1);
+
+        if(Display == 1) {
+            Display(airline);
         }
+
+        System.exit(0);
+    }
+
+    private static void ParseFile(String[] args, AbstractAirline airline) {
+        String fileName;
+        fileName = parseFileName(args);
+        TextParser parser = new TextParser(fileName,airline);
+        try {
+            parser.parse();
+        } catch (ParserException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static void Display(AbstractAirline airline) {
+        Collection p = airline.getFlights();
+        //System.out.println(airline.toString());
+        System.out.println(airline.getName());
+        for (Object s : p) {
+            System.out.println(s);
+        }
+    }
+
+    private static AbstractAirline AssignArgs(String[] args) {
+        String name;
+        int number;
+        String src;
+        String dummy;
+        String Depart;
+        String dest;
+        String Arrive;
 
         name = args[indx];
         number = ValidateFlightNumber(args[1+indx]);
         src = args[2+indx];
         dummy = args[3+indx] + " " + args[4+indx];
         Depart = ValidateDepartureString(dummy);
-        dest = args[4+indx];
+        dest = args[5+indx];
         try {
             dummy = args[6 + indx] + " " + args[7 + indx];
         } catch (Exception e) {
@@ -100,29 +112,44 @@ public class Project2 {
         Flight flight = new Flight(number,src,dest,Depart,Arrive);
 
         airline.addFlight(flight);
+        return airline;
+    }
 
-        fileName = parseFileName(args);
-        if(parseFlag == 1){
-            TextParser parser = new TextParser(fileName,airline);
-            try {
-                parser.parse();
-            } catch (ParserException e) {
-                e.printStackTrace();
-            }
+    private static void ValidateAirportCodes(String[] args) {
+        if(args[2+indx].length() > 3 || args[5+indx].length() > 3){
+            System.err.println("Source or Destination airport codes are larger than 3 letters");
+            System.exit(1);
         }
-
-        if(Display == 1) {
-            Collection p = airline.getFlights();
-            //print = airline.toString();
-            System.out.println(airline.getName());
-            Iterator itr = p.iterator();
-            while(itr.hasNext()) {
-                Object s = itr.next();
-                System.out.println(s);
-            }
+        if(args[2+indx].length() < 3 || args[5+indx].length() < 3){
+            System.err.println("Source or Destination airport codes are less than 3 letters");
+            System.exit(1);
         }
+    }
 
-        System.exit(0);
+    private static void parseArgs(String [] args){
+        int i = 0;
+        
+        for (String arg : args) {
+            if(arg.contains("-README")){
+                DisplayREADME();
+            }
+            //System.out.println(arg);
+            //System.out.println(arg.contains("-print"));
+            if(arg.contains("-print")){
+                Display = 1;
+                //If -print is at beginning, offset indx by one
+                //otherwise, offset index by zero
+                if(arg.compareTo("-print") == 0 && i == 0){
+                    indx = 1;
+                }
+            }
+            if(arg.contains("-textFile")){
+                indx += 2;
+                parseFlag = 1;
+
+            }
+            ++i;
+        }
     }
 
     /**
@@ -172,7 +199,7 @@ public class Project2 {
      */
     public static String ValidateArrivalString(String arg) {
         if(!arg.matches("^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\\d\\d ([01]?[0-9]|2[0-3]):[0-5][0-9]")){
-            System.err.println("\n"+ arg + " is not a valid date/time format!\n" +
+            System.err.println("\n"+ arg + " is not a valid arrival date/time format!\n" +
                     "Correct format is: MM/DD/YYYY HH:MM" +
                     "\nHint: Single digit days must be followed by a zero" +
                     "\ne.g. 01/01/2014 instead of 1/1/2014");
@@ -188,7 +215,7 @@ public class Project2 {
      */
     public static String ValidateDepartureString(String arg) {
         if(!arg.matches("^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\\d\\d ([01]?[0-9]|2[0-3]):[0-5][0-9]")){
-            System.err.println("\n"+ arg + " is not a valid date/time format!\n" +
+            System.err.println("\n"+ arg + " is not a valid departure date/time format!\n" +
                     "Correct format is: MM/DD/YYYY HH:MM" +
                     "\nHint: Single digit days must be followed by a zero" +
                     "\ne.g. 01/01/2014 instead of 1/1/2014");
@@ -217,7 +244,8 @@ public class Project2 {
      * Displays the readme if -README is passed in as an argument, ignoring all other arguments
      */
     private static void DisplayREADME() {
-        System.out.println("This program takes in arguments to create an airline" +
+        System.out.println("Created by: Peter Gicking\n" +
+                "This program takes in arguments to create an airline" +
                 " and flights for that airline that can be stored in a file." +
                 "\nUsage:  java edu.pdx.cs410J.<login-id>.Project1 [options] <args> [options]\n" +
                 "The arguments need to be put in the correct order for the program to work" +

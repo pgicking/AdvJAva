@@ -33,8 +33,8 @@ public class Flight extends AbstractFlight {
         this.number = number;
         this.src = src;
         this.dest = dest;
-        Depart = depart;
-        Arrive = arrive;
+        this.Depart = depart;
+        this.Arrive = arrive;
     }
     /**
     @return Returns the flight number

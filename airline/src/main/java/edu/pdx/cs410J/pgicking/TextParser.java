@@ -120,11 +120,12 @@ public class TextParser implements AirlineParser {
      * @param flightNum Casted to a number and passed in
      */
     public void CreateFlight(String [] args, int flightNum){
-        String dummy;
 
         String name = args[0];
         String src = args[2];
-        dummy = args[3] + " " + args[4];
+        System.out.println(name + " " + src);
+        String dummy = args[3] + " " + args[4];
+        System.out.println(dummy);
         String Depart = ValidateDepartureString(dummy);
         String dest = args[5];
         try {
