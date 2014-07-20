@@ -9,6 +9,7 @@ import java.io.*;
 
 import static edu.pdx.cs410J.pgicking.Project2.ValidateArrivalString;
 import static edu.pdx.cs410J.pgicking.Project2.ValidateDepartureString;
+import static edu.pdx.cs410J.pgicking.Project3.FormatDateString;
 
 /**
  * Created by pgicking on 7/12/14.
@@ -75,7 +76,7 @@ public class TextParser implements AirlineParser {
                 //Read airline flights and print if needed
                 String dummy;
                 String[] split;
-                String[] test = {"1", "2", "3", "4", "5","6","7","8"};
+                String[] test = {"1", "2", "3", "4", "5","6","7","8", "9", "10"};
                 int flightNum;
                 try {
                     while((dummy = in.readLine()) != null) {
@@ -84,7 +85,7 @@ public class TextParser implements AirlineParser {
                         if(test.length != split.length){
                             //System.out.println(test.length);
                             //System.out.println(split.length);
-                            System.err.print("Textfile might be malformed");
+                            System.err.print("Textfile is be malformed");
                             System.exit(1);
                         }
                         //split[3] += " " + split[4];
@@ -123,18 +124,20 @@ public class TextParser implements AirlineParser {
 
         String name = args[0];
         String src = args[2];
-        System.out.println(name + " " + src);
-        String dummy = args[3] + " " + args[4];
-        System.out.println(dummy);
-        String Depart = ValidateDepartureString(dummy);
-        String dest = args[5];
+        //System.out.println(name + " " + src);
+        String dummy = args[3] + " " + args[4] + " " + args[5];
+        //System.out.println(dummy);
+        //String Depart = ValidateDepartureString(dummy);
+        String Depart = FormatDateString(dummy);
+        String dest = args[6];
         try {
-            dummy = args[6] + " " + args[7];
+            dummy = args[7] + " " + args[8] + " " + args[9];
         } catch (Exception e) {
             System.err.print("Missing Command line arguments." +
                     "\nCheck to make sure you have a departure date and time\n");
         }
-        String Arrive = ValidateArrivalString(dummy);
+        //String Arrive = ValidateArrivalString(dummy);
+        String Arrive = FormatDateString(dummy);
 
         Flight flight = new Flight(flightNum,src,Depart,dest,Arrive);
         airline.addFlight(flight);

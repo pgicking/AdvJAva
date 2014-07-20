@@ -2,6 +2,14 @@ package edu.pdx.cs410J.pgicking;
 
 import edu.pdx.cs410J.AbstractFlight;
 
+import java.text.DateFormat;
+import java.util.Date;
+import java.lang.Comparable;
+import edu.pdx.cs410J.AirportNames;
+
+import static edu.pdx.cs410J.pgicking.Project3.FormatDateString;
+
+
 /**
 @author Peter Gicking
  */
@@ -12,7 +20,7 @@ import edu.pdx.cs410J.AbstractFlight;
  * destination airport codes, a flight number, and
  * arrival and departure times</p>
 */
-public class Flight extends AbstractFlight {
+public class Flight extends AbstractFlight implements Comparable{
 
    int number;
    String src;
@@ -54,6 +62,7 @@ public class Flight extends AbstractFlight {
     @return Returns the depart time
     */
     public  String getDepartureString(){
+        Depart = FormatDateString(Depart);
         return Depart;
     }
 
@@ -68,6 +77,7 @@ public class Flight extends AbstractFlight {
     @return  returns the arrival time
     */
     public  String getArrivalString(){
+        Arrive = FormatDateString(Arrive);
         return Arrive;
     }
 
@@ -84,5 +94,11 @@ public class Flight extends AbstractFlight {
                  dest + " " +
                  Arrive;
     }
+
+    @Override
+    public int compareTo(Object o) {
+        return this.getSource().compareTo(((Flight) o).getSource());
+    }
+
 }
 
