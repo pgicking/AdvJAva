@@ -101,7 +101,7 @@ public class Project3 {
      * @return The validated airport code
      */
     public static String ValidateRealAirportCode(String code){
-        String name = AirportNames.getName(code.toLowerCase());
+        String name = AirportNames.getName(code.toUpperCase());
 
         if(name == null){
             System.err.print(code + " is not a valid airport code!\n" +
@@ -154,6 +154,7 @@ public class Project3 {
      */
     private static void ValidateAirportCodeLength(String[] args) {
         if(args[2+indx].length() > 3 || args[6+indx].length() > 3){
+            System.out.println(args[2+indx]);
             System.err.println("Source or Destination airport codes are larger than 3 letters");
             System.exit(1);
         }
@@ -271,6 +272,7 @@ public class Project3 {
      * @return The formatted date
      */
     public static String FormatDateString(String arg) {
+        //System.out.println("Formatting: " + arg);
         int j = DateFormat.SHORT;
         Date date = null;
         DateFormat df = DateFormat.getDateTimeInstance(j, j, Locale.US);

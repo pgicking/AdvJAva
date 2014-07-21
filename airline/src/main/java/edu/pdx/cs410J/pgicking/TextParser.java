@@ -76,15 +76,15 @@ public class TextParser implements AirlineParser {
                 //Read airline flights and print if needed
                 String dummy;
                 String[] split;
-                String[] test = {"1", "2", "3", "4", "5","6","7","8", "9", "10"};
+                String[] test = {"1", "2", "3", "4", "5","6","7","8", "9"};
                 int flightNum;
                 try {
                     while((dummy = in.readLine()) != null) {
                         //System.out.println(dummy);
                         split = dummy.split(" ");
                         if(test.length != split.length){
-                            //System.out.println(test.length);
-                            //System.out.println(split.length);
+                            System.out.println(test.length);
+                            System.out.println(split.length);
                             System.err.print("Textfile is be malformed");
                             System.exit(1);
                         }
@@ -94,7 +94,7 @@ public class TextParser implements AirlineParser {
                         //split[5] += split[6] + " " + split[7];
                         //split = removeAt(6,split);
                         //split = removeAt(6,split);
-                        flightNum = Integer.parseInt(split[1]);
+                        flightNum = Integer.parseInt(split[0]);
                         CreateFlight(split,flightNum);
                     }
                 } catch (IOException e) {
@@ -122,16 +122,17 @@ public class TextParser implements AirlineParser {
      */
     public void CreateFlight(String [] args, int flightNum){
 
-        String name = args[0];
-        String src = args[2];
+        //String name = args[0];
+        String src = args[1];
         //System.out.println(name + " " + src);
-        String dummy = args[3] + " " + args[4] + " " + args[5];
+        String dummy = args[2] + " " + args[3] + " " + args[4];
         //System.out.println(dummy);
         //String Depart = ValidateDepartureString(dummy);
         String Depart = FormatDateString(dummy);
-        String dest = args[6];
+        String dest = args[5];
         try {
-            dummy = args[7] + " " + args[8] + " " + args[9];
+            dummy = args[6] + " " + args[7] + " " + args[8];
+            //System.out.println(dummy);
         } catch (Exception e) {
             System.err.print("Missing Command line arguments." +
                     "\nCheck to make sure you have a departure date and time\n");
@@ -139,7 +140,7 @@ public class TextParser implements AirlineParser {
         //String Arrive = ValidateArrivalString(dummy);
         String Arrive = FormatDateString(dummy);
 
-        Flight flight = new Flight(flightNum,src,Depart,dest,Arrive);
+        Flight flight = new Flight(flightNum,src,dest,Depart,Arrive);
         airline.addFlight(flight);
     }
 

@@ -4,6 +4,8 @@ import edu.pdx.cs410J.AbstractAirline;
 import edu.pdx.cs410J.AirlineDumper;
 
 import java.io.*;
+import java.util.Collection;
+import java.util.LinkedList;
 
 
 /**
@@ -65,11 +67,16 @@ public class TextDumper implements AirlineDumper{
                 System.exit(1);
             }
             else{
+                Collection flights = new LinkedList<Flight>();
+                flights = abstractAirline.getFlights();
                 //PrintWriter writer = new PrintWriter(fileName, "UTF-8");
                 System.out.println("Appending to " + fileName);
-                PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
-                System.out.println("Writng: " + abstractAirline.toString());
-                writer.println(abstractAirline.toString());
+                PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, false)));
+                writer.println(abstractAirline.getName());
+                for(Object o : flights) {
+                    //System.out.println("Writng: " + abstractAirline.toString());
+                    writer.println(o.toString());
+                }
                 writer.close();
             }
         }

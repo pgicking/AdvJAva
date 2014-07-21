@@ -20,7 +20,7 @@ import static edu.pdx.cs410J.pgicking.Project3.FormatDateString;
  * destination airport codes, a flight number, and
  * arrival and departure times</p>
 */
-public class Flight extends AbstractFlight implements Comparable{
+public class Flight extends AbstractFlight implements Comparable<Flight>{
 
    int number;
    String src;
@@ -43,6 +43,7 @@ public class Flight extends AbstractFlight implements Comparable{
         this.dest = dest;
         this.Depart = depart;
         this.Arrive = arrive;
+        //System.out.println("Constructor flight: " + "Arrive: " + this.Arrive + " Depart: " + this.Depart);
     }
     /**
     @return Returns the flight number
@@ -95,10 +96,15 @@ public class Flight extends AbstractFlight implements Comparable{
                  Arrive;
     }
 
-    @Override
-    public int compareTo(Object o) {
-        return this.getSource().compareTo(((Flight) o).getSource());
-    }
 
+    @Override
+    public int compareTo(Flight o) {
+        if(this.getSource().compareTo(((Flight) o).getSource()) != 0) {
+            return (this.getSource().compareTo(o.getSource()));
+        }
+        else
+            return this.getDepartureString().compareTo(o.getDepartureString());
+    }
 }
+
 

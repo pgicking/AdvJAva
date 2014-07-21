@@ -20,7 +20,7 @@ import java.util.LinkedList;
 
 public class Airline extends AbstractAirline {
     String Name;
-    LinkedList<AbstractFlight> FlightList = new LinkedList<>();
+    LinkedList<Flight> FlightList = new LinkedList<>();
 
     /**
     Creates an airline and sets the name passed in from flight.java
@@ -47,7 +47,7 @@ public class Airline extends AbstractAirline {
     */
     @Override
     public void addFlight(AbstractFlight abstractFlight) {
-        FlightList.add(abstractFlight);
+        FlightList.add((Flight)abstractFlight);
         Collections.sort(FlightList);
     }
 
@@ -74,13 +74,5 @@ public class Airline extends AbstractAirline {
         return  Name + " " + sb;
     }
 
-    public void SortFlights(){
-        Iterator itr = FlightList.iterator();
-        Object f;
-        while(itr.hasNext()) {
-            f = itr.next();
-            ((Flight) f).compareTo(FlightList.element().getSource());
-        }
-        }
-    }
 }
+
