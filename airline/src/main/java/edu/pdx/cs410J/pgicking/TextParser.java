@@ -7,9 +7,7 @@ import edu.pdx.cs410J.ParserException;
 
 import java.io.*;
 
-import static edu.pdx.cs410J.pgicking.Project2.ValidateArrivalString;
-import static edu.pdx.cs410J.pgicking.Project2.ValidateDepartureString;
-import static edu.pdx.cs410J.pgicking.Project3.FormatDateString;
+import static edu.pdx.cs410J.pgicking.Project3.FormatDateStringAsString;
 
 /**
  * Created by pgicking on 7/12/14.
@@ -88,12 +86,6 @@ public class TextParser implements AirlineParser {
                             System.err.print("Textfile is be malformed");
                             System.exit(1);
                         }
-                        //split[3] += " " + split[4];
-                        //split[4] = split[5];
-                        //split[5] = "";
-                        //split[5] += split[6] + " " + split[7];
-                        //split = removeAt(6,split);
-                        //split = removeAt(6,split);
                         flightNum = Integer.parseInt(split[0]);
                         CreateFlight(split,flightNum);
                     }
@@ -124,11 +116,8 @@ public class TextParser implements AirlineParser {
 
         //String name = args[0];
         String src = args[1];
-        //System.out.println(name + " " + src);
         String dummy = args[2] + " " + args[3] + " " + args[4];
-        //System.out.println(dummy);
-        //String Depart = ValidateDepartureString(dummy);
-        String Depart = FormatDateString(dummy);
+        String Depart = FormatDateStringAsString(dummy);
         String dest = args[5];
         try {
             dummy = args[6] + " " + args[7] + " " + args[8];
@@ -137,8 +126,7 @@ public class TextParser implements AirlineParser {
             System.err.print("Missing Command line arguments." +
                     "\nCheck to make sure you have a departure date and time\n");
         }
-        //String Arrive = ValidateArrivalString(dummy);
-        String Arrive = FormatDateString(dummy);
+        String Arrive = FormatDateStringAsString(dummy);
 
         Flight flight = new Flight(flightNum,src,dest,Depart,Arrive);
         airline.addFlight(flight);

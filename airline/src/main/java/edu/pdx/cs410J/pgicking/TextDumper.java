@@ -39,9 +39,9 @@ public class TextDumper implements AirlineDumper{
 
             PrintWriter writer = new PrintWriter(fileName, "UTF-8");
             writer.println(abstractAirline.getName());
-            writer.println(abstractAirline.toString());
+            //writer.println(abstractAirline.toString());
             writer.close();
-            System.exit(0);
+            //System.exit(0);
         }
 
         FileReader reader = null;
@@ -67,7 +67,8 @@ public class TextDumper implements AirlineDumper{
                 System.exit(1);
             }
             else{
-                Collection flights = new LinkedList<Flight>();
+                //Bug: If file doesnt exist, the first entry is printed twice
+                Collection flights;
                 flights = abstractAirline.getFlights();
                 //PrintWriter writer = new PrintWriter(fileName, "UTF-8");
                 System.out.println("Appending to " + fileName);

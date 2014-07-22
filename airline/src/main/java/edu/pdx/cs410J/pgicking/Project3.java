@@ -3,6 +3,7 @@ package edu.pdx.cs410J.pgicking;
 import edu.pdx.cs410J.AbstractAirline;
 import edu.pdx.cs410J.ParserException;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -61,6 +62,12 @@ public class Project3 {
             Display(airline);
         }
 
+        if(flags[3] == 1){
+            String prettyFile = parsePrettyFileName(args);
+            PrettyPrint(airline,prettyFile);
+            //PrettyPrint
+        }
+
         System.exit(0);
     }
 
@@ -71,7 +78,7 @@ public class Project3 {
      */
     private static void ParseFile(String[] args, AbstractAirline airline) {
         String fileName;
-        fileName = parseFileName(args);
+        fileName = parseTextFileName(args);
         TextParser parser = new TextParser(fileName,airline);
         try {
             parser.parse();
@@ -125,10 +132,8 @@ public class Project3 {
         src = ValidateRealAirportCode(args[2 + indx]);
         dummy = args[3+indx] + " " + args[4+indx] + " " + args[5+indx];
 
-        //Depart = ValidateDepartureString(dummy);
-        Depart = FormatDateString(dummy);
+        Depart = FormatDateStringAsString(dummy);
         dest = ValidateRealAirportCode(args[6 + indx]);
-        //System.out.println(dest);
 
         try {
             dummy = args[7 + indx] + " " + args[8 + indx] + " " + args[9+indx];
@@ -136,8 +141,7 @@ public class Project3 {
             System.err.print("Missing Command line arguments." +
                     "\nCheck to make sure you have a departure date and time\n");
         }
-        //Arrive = ValidateArrivalString(dummy);
-        Arrive = FormatDateString(dummy);
+        Arrive = FormatDateStringAsString(dummy);
 
         AbstractAirline airline = new Airline(name);
 
@@ -173,18 +177,11 @@ public class Project3 {
             if(arg.contains("-README")){
                 DisplayREADME();
             }
-            //System.out.println(arg);
-            //System.out.println(arg.contains("-print"));
             if(arg.contains("-print")){
                 Display = 1;
                 flags[1] = 1;
                 indx += 1;
                 flags[0] += 1;
-                //If -print is at beginning, offset indx by one
-                //otherwise, offset index by zero
-                //if(arg.compareTo("-print") == 0 && i == 0){
-                //    indx = 1;
-                //}
             }
             if(arg.contains("-textFile")){
                 indx += 2;
@@ -213,7 +210,7 @@ public class Project3 {
      * @param args Command line string
      * @return The file name
      */
-    private static String parseFileName(String [] args){
+    private static String parseTextFileName(String[] args){
         String fileName = null;
         int i = 0;
         int num = 0;
@@ -233,6 +230,64 @@ public class Project3 {
         return fileName;
     }
 
+    private static String parsePrettyFileName(String [] args){
+        String fileName = null;
+        int i = 0;
+        int num = 0;
+        for(String arg : args) {
+            if (arg.contains("-pretty")) {
+                num = i;
+            }
+            //Grab the next element after -pretty to get
+            //The file name
+            if (i - num == 1) {
+                if(arg.contains(".txt")) {
+                    fileName = arg;
+                    break;
+                }
+                if(arg.equals("-")){
+                    fileName = arg;
+                    break;
+                }
+            }
+            ++i;
+        }
+        //System.out.println(fileName);
+        return fileName;
+    }
+
+    private static void PrettyPrint(AbstractAirline airline, String fileName){
+        PrettyPrinter pretty = new PrettyPrinter(fileName);
+        try {
+            pretty.dump(airline);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static String FormatDateAsLong(String dateString){
+        int j = DateFormat.LONG;
+        DateFormat df = DateFormat.getDateTimeInstance(j, j, Locale.US);
+        Date date = null;
+
+        try {
+            date = df.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return df.format(date);
+    }
+
+    public static int CalculateFlightLength(Date depart, Date arrive){
+        int length = (int) (arrive.getTime() - depart.getTime());
+        length = length / (1000 * 60 * 60);
+
+        return length;
+    }
+
+
     /**
      * Checks to see if there are zero or too many arguments passed into the command line
      * @param args  The array of the command line arguments
@@ -242,14 +297,14 @@ public class Project3 {
             System.err.println("Missing command line arguments");
             System.exit(1);
         }
-        if(args.length > 14){
+        if(args.length > 16){
             System.err.println("Too many command line arguments");
             System.exit(1);
         }
     }
 
     /**
-     * @deprecated replaced by FormatDateString in Project 3
+     * @deprecated replaced by FormatDatestring in Project 3
      Validates the arrival string to make sure its in correct format, then returns it
      @param    arg     The index of the arguments containing arrival string
      @return   The validated arrival string
@@ -271,7 +326,7 @@ public class Project3 {
      * @param arg The arrival or departure date strings
      * @return The formatted date
      */
-    public static String FormatDateString(String arg) {
+    public static String FormatDateStringAsString(String arg) {
         //System.out.println("Formatting: " + arg);
         int j = DateFormat.SHORT;
         Date date = null;
@@ -289,8 +344,25 @@ public class Project3 {
         return df.format(date);
     }
 
+    public static Date FormatDateStringAsDate(String arg){
+        int j = DateFormat.SHORT;
+        Date date = null;
+        DateFormat df = DateFormat.getDateTimeInstance(j, j, Locale.US);
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+        try{
+            Date parsedDate = formatter.parse(arg);
+            date = df.parse(arg);
+        } catch (ParseException e) {
+            System.err.print("Departure or Arrival date is not valid.\n" +
+                    "Correct format is MM/DD/YYYY HH:MM am/pm\n");
+            e.printStackTrace();
+        }
+        //System.out.println(date.toString());
+        return date;
+    }
+
     /**
-     * @deprecated Replaced by FormatDateString in Project 3
+     * @deprecated Replaced by FormatDatestring in Project 3
      Validates the departure string to make sure its in correct format, then returns it
      @param    arg    The index of the arguments containing departure string
      @return   The validated departure string

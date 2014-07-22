@@ -2,12 +2,11 @@ package edu.pdx.cs410J.pgicking;
 
 import edu.pdx.cs410J.AbstractFlight;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.lang.Comparable;
-import edu.pdx.cs410J.AirportNames;
+import java.util.Date;
 
-import static edu.pdx.cs410J.pgicking.Project3.FormatDateString;
+import static edu.pdx.cs410J.pgicking.Project3.FormatDateStringAsDate;
+import static edu.pdx.cs410J.pgicking.Project3.FormatDateStringAsString;
 
 
 /**
@@ -62,9 +61,19 @@ public class Flight extends AbstractFlight implements Comparable<Flight>{
     /**
     @return Returns the depart time
     */
-    public  String getDepartureString(){
-        Depart = FormatDateString(Depart);
+    public String getDepartureString(){
+        Depart = FormatDateStringAsString(Depart);
         return Depart;
+    }
+
+    public Date getDeparture(){
+        Date Departure = FormatDateStringAsDate(Depart);
+        return Departure;
+    }
+
+    public Date getArrival(){
+        Date Arrival = FormatDateStringAsDate(Arrive);
+        return Arrival;
     }
 
     /**
@@ -78,7 +87,7 @@ public class Flight extends AbstractFlight implements Comparable<Flight>{
     @return  returns the arrival time
     */
     public  String getArrivalString(){
-        Arrive = FormatDateString(Arrive);
+        Arrive = FormatDateStringAsString(Arrive);
         return Arrive;
     }
 
@@ -96,10 +105,14 @@ public class Flight extends AbstractFlight implements Comparable<Flight>{
                  Arrive;
     }
 
-
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public int compareTo(Flight o) {
-        if(this.getSource().compareTo(((Flight) o).getSource()) != 0) {
+        if(this.getSource().compareTo((o).getSource()) != 0) {
             return (this.getSource().compareTo(o.getSource()));
         }
         else
