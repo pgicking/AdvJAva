@@ -27,13 +27,14 @@ public class PrettyPrinter implements AirlineDumper{
     public void dump(AbstractAirline abstractAirline) throws IOException {
         Collection flights;
         flights = abstractAirline.getFlights();
-        int length;
+        Long length;
 
         if(!fileName.equals("-")) {
             if (!fileName.contains(".txt")) {
                 System.err.print("File must be a .txt");
                 System.exit(1);
             }
+            System.out.println("Printing to " + fileName);
             //PrintWriter writer = new PrintWriter(fileName, "UTF-8");
             PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, false)));
             writer.println(abstractAirline.getName());
@@ -53,7 +54,7 @@ public class PrettyPrinter implements AirlineDumper{
         else {
             System.out.println(abstractAirline.getName());
             for (Object o : flights) {
-                length = CalculateFlightLength(((Flight)o).getDeparture(),((Flight)o).getArrival());
+                length = CalculateFlightLength(((Flight) o).getDeparture(), ((Flight) o).getArrival());
                 String Depart = (((Flight)o).getDepartureString());
                 //System.out.println("Writng: " + abstractAirline.toString());
                 String Arrive = (((Flight)o).getArrivalString());

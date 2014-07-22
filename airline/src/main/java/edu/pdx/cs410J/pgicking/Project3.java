@@ -158,11 +158,14 @@ public class Project3 {
      */
     private static void ValidateAirportCodeLength(String[] args) {
         if(args[2+indx].length() > 3 || args[6+indx].length() > 3){
-            System.out.println(args[2+indx]);
+            //System.out.println(args[2+indx]);
+            //System.out.println(args[6+indx]);
             System.err.println("Source or Destination airport codes are larger than 3 letters");
             System.exit(1);
         }
         if(args[2+indx].length() < 3 || args[6+indx].length() < 3){
+            //System.out.println(args[2+indx]);
+            //System.out.println(args[6+indx]);
             System.err.println("Source or Destination airport codes are less than 3 letters");
             System.exit(1);
         }
@@ -280,9 +283,9 @@ public class Project3 {
         return df.format(date);
     }
 
-    public static int CalculateFlightLength(Date depart, Date arrive){
-        int length = (int) (arrive.getTime() - depart.getTime());
-        length = length / (1000 * 60 * 60);
+    public static Long CalculateFlightLength(Date depart, Date arrive){
+        Long length = (arrive.getTime() - depart.getTime());
+        length = length / (60000L);
 
         return length;
     }
@@ -338,7 +341,7 @@ public class Project3 {
         } catch (ParseException e) {
             System.err.print("Departure or Arrival date is not valid.\n" +
                     "Correct format is MM/DD/YYYY HH:MM am/pm\n");
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         //System.out.println(date.toString());
         return df.format(date);
@@ -355,7 +358,7 @@ public class Project3 {
         } catch (ParseException e) {
             System.err.print("Departure or Arrival date is not valid.\n" +
                     "Correct format is MM/DD/YYYY HH:MM am/pm\n");
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         //System.out.println(date.toString());
         return date;
@@ -416,6 +419,10 @@ public class Project3 {
                 "Example command -print -textFile output.txt alaska 123 PDX \"03/15/2014 10:39\" ALA  \"03/02/2014 01:35\"" +
                 "");
         System.exit(0);
+    }
+
+    public static void setIndx(int i){
+        indx = i;
     }
 
 }

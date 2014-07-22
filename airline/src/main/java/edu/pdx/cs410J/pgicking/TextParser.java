@@ -83,7 +83,7 @@ public class TextParser implements AirlineParser {
                         if(test.length != split.length){
                             System.out.println(test.length);
                             System.out.println(split.length);
-                            System.err.print("Textfile is be malformed");
+                            System.err.print("Textfile is malformed");
                             System.exit(1);
                         }
                         flightNum = Integer.parseInt(split[0]);
