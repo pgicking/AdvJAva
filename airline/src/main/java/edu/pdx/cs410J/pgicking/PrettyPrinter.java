@@ -23,6 +23,12 @@ public class PrettyPrinter implements AirlineDumper{
         this.fileName = fileName;
     }
 
+    /**
+     * The prettyprint version of the dump. It mimics textfile dump nearly exactly
+     * the main difference is it formats the string different.
+     * @param abstractAirline   Abstract airline flight list to dump
+     * @throws IOException
+     */
     @Override
     public void dump(AbstractAirline abstractAirline) throws IOException {
         Collection flights;

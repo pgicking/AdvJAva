@@ -93,7 +93,7 @@ public class Flight extends AbstractFlight implements Comparable<Flight>{
 
 
     /**
-    @return  Returns the string of the flight information
+     * @return  Returns the string of the flight information
      */
     @Override
     public String toString() {
@@ -106,9 +106,10 @@ public class Flight extends AbstractFlight implements Comparable<Flight>{
     }
 
     /**
-     *
-     * @param o
-     * @return
+     * The overridden compare to method. I found this in daves notes
+     * and I dont really understand quite it works though
+     * @param o A flight to compare its source or departure time
+     * @return  Returns an int, -1, 0 or 1
      */
     @Override
     public int compareTo(Flight o) {

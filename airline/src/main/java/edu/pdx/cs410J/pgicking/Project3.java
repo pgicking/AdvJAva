@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Scanner;
 
 import edu.pdx.cs410J.AirportNames;
 
@@ -44,6 +45,7 @@ public class Project3 {
       arriveTime Arrival date and time (24-hour time)
       */
         int[] flags;
+        String fileName = null;
         Class c = AbstractAirline.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
 
         flags = parseArgs(args);
@@ -55,7 +57,8 @@ public class Project3 {
         AbstractAirline airline = AssignArgs(args);
 
         if(flags[2] == 1) {
-            ParseFile(args, airline);
+            fileName = parseTextFileName(args);
+            ParseFile(args, airline,fileName);
         }
 
         if(flags[1] == 1) {
@@ -64,7 +67,11 @@ public class Project3 {
 
         if(flags[3] == 1){
             String prettyFile = parsePrettyFileName(args);
-            PrettyPrint(airline,prettyFile);
+            if(prettyFile.equals(fileName)){
+                System.err.print("Your Textfile and prettyPrint file are the same!");
+                System.exit(1);
+            }
+            PrettyPrint(airline, prettyFile);
             //PrettyPrint
         }
 
@@ -75,10 +82,11 @@ public class Project3 {
      * Grabs the name of the file to parse and then calls the parser to read it
      * @param args   The array of the command line arguments
      * @param airline The airline is passed in so it can be added to parsers constructor
+     * @param fileName  The filename
      */
-    private static void ParseFile(String[] args, AbstractAirline airline) {
-        String fileName;
-        fileName = parseTextFileName(args);
+    private static void ParseFile(String[] args, AbstractAirline airline, String fileName) {
+        //String fileName;
+        //fileName = parseTextFileName(args);
         TextParser parser = new TextParser(fileName,airline);
         try {
             parser.parse();
@@ -118,6 +126,12 @@ public class Project3 {
         return code;
     }
 
+    /**
+     * Strips apart the command line arguments and assigns them to variables
+     * and then puts them into a flight
+     * @param args  The array of the command line arguments
+     * @return  The created airline
+     */
     private static AbstractAirline AssignArgs(String[] args) {
         String name;
         int number;
@@ -171,6 +185,11 @@ public class Project3 {
         }
     }
 
+    /**
+     * Parse the command line to check for the different flags that could be passed in
+     * @param args  The array of the command line arguments
+     * @return  an int array of flags
+     */
     private static int[] parseArgs(String[] args){
         int i = 0;
         String split;
@@ -233,6 +252,12 @@ public class Project3 {
         return fileName;
     }
 
+    /**
+     * Grabs the prettyPrint file name from the command line. If
+     * its a "-" then it sets a flag to print to std out
+     * @param args The array of the command line arguments
+     * @return  the filename
+     */
     private static String parsePrettyFileName(String [] args){
         String fileName = null;
         int i = 0;
@@ -259,6 +284,12 @@ public class Project3 {
         return fileName;
     }
 
+    /**
+     * Simple function that calls the pretty printer and nothing else.
+     * I just wanted it out of main
+     * @param airline   The airline
+     * @param fileName  The filename
+     */
     private static void PrettyPrint(AbstractAirline airline, String fileName){
         PrettyPrinter pretty = new PrettyPrinter(fileName);
         try {
@@ -269,6 +300,11 @@ public class Project3 {
 
     }
 
+    /**
+     * Formats the date string as a DateFormat.LONG, returning a date object
+     * @param dateString    A string to be converted
+     * @return      The string converted to a Date object
+     */
     public static String FormatDateAsLong(String dateString){
         int j = DateFormat.LONG;
         DateFormat df = DateFormat.getDateTimeInstance(j, j, Locale.US);
@@ -283,6 +319,12 @@ public class Project3 {
         return df.format(date);
     }
 
+    /**
+     * Calculates the flight time in minutes for prettyPrint
+     * @param depart    The departure date
+     * @param arrive    The arrive date
+     * @return  The length in minutes
+     */
     public static Long CalculateFlightLength(Date depart, Date arrive){
         Long length = (arrive.getTime() - depart.getTime());
         length = length / (60000L);
@@ -347,6 +389,11 @@ public class Project3 {
         return df.format(date);
     }
 
+    /**
+     * Converts a date string into a date object
+     * @param arg  The array of command line arguments
+     * @return   A date object
+     */
     public static Date FormatDateStringAsDate(String arg){
         int j = DateFormat.SHORT;
         Date date = null;
@@ -421,6 +468,11 @@ public class Project3 {
         System.exit(0);
     }
 
+    /**
+     * Sets the indx to zero, this function only exists for the tests
+     * because indx is static and needs to be reset to zero every test
+     * @param i the int to set indx to, should always be zero
+     */
     public static void setIndx(int i){
         indx = i;
     }

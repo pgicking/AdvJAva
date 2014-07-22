@@ -19,7 +19,8 @@ public class TextDumper implements AirlineDumper{
     }
 
     /**
-     * Dump the contents of an airline to a textfile
+     * Dump the contents of an airline to a textfile. If it exists, dump to it
+     * or if it doesnt, create it and then dump it
      *
      * @param abstractAirline Airline which dumps its flights to a textfile
      * @throws IOException

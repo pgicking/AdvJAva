@@ -207,7 +207,7 @@ public class Project3Test extends InvokeMainTestCase{
     @Test
     public void testPrettyPrintFile(){
         String [] Arguments = {"-print", "-textFile", "output.txt", "-pretty", "prettyText.txt",
-                "alaska", "123", "BOB", "03/15/2014", "10:39", "pm", "ORD",  "03/02/2014", "01:35", "pm"};
+                "alaska", "123", "PDX", "03/15/2014", "10:39", "pm", "ORD",  "03/02/2014", "01:35", "pm"};
         String errormessage = "Printing to ";
         InvokeMainWithArgsMatchForStdOut(Arguments, errormessage);
     }
@@ -215,10 +215,18 @@ public class Project3Test extends InvokeMainTestCase{
     @Test
     public void testInvalidAirportCode(){
         String [] Arguments = {"-print", "-textFile", "output.txt", "-pretty", "prettyText.txt",
-                "alaska", "123", "PDX", "03/15/2014", "10:39", "pm", "ORD",  "03/02/2014", "01:35", "pm"};
+                "alaska", "123", "POK", "03/15/2014", "10:39", "pm", "ORD",  "03/02/2014", "01:35", "pm"};
         String errormessage = " is not a valid airport code!";
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
 
+    }
+
+    @Test
+    public void testSameFileName(){
+        String [] Arguments = {"-print", "-textFile", "output.txt", "-pretty", "output.txt",
+                "alaska", "123", "PEK", "03/15/2014", "10:39", "pm", "ORD",  "03/02/2014", "01:35", "pm"};
+        String errormessage = "Your Textfile and prettyPrint file are the same!";
+        InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }
 
 }
