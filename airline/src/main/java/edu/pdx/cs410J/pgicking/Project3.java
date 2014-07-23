@@ -451,19 +451,21 @@ public class Project3 {
         System.out.println("Created by: Peter Gicking\n" +
                 "This program takes in arguments to create an airline" +
                 " and flights for that airline that can be stored in a file." +
-                "\nUsage:  java edu.pdx.cs410J.<login-id>.Project1 [options] <args> [options]\n" +
+                "\nUsage:  java edu.pdx.cs410J.<login-id>.Project1 [options] <args> \n" +
                 "The arguments need to be put in the correct order for the program to work" +
                 "\n This order is" +
                 "name: The name of the airline\n" +
                 "flightNumber: The flight number\n" +
                 "src: Three-letter code of departure airport\n" +
-                "departTime: Departure date and time (24-hour time)\n" +
+                "departTime: Departure date and time (MM/dd/yyyy hh:mm am/pm 12 hour time)\n" +
                 "dest: Three-letter code of arrival airport\n" +
-                "arriveTime: Arrival date and time (24-hour time)\n" +
+                "arriveTime: Arrival date and time (MM/dd/yyyy hh:mm am/pm 12 hour time)\n" +
                 "[Options]\n-textFile file: Where to read/write the airline info\n" +
                 "-print: Prints a description of the new flight\n" +
                 "-README: Prints a README for this project and exits\n" +
-                "Example command -print -textFile output.txt alaska 123 PDX \"03/15/2014 10:39\" ALA  \"03/02/2014 01:35\"" +
+                "-textFile file.txt" +
+                "-pretty file or - (prints to standard out)" +
+                "-print -textFile output.txt -pretty - alaska 321 PEK 01/15/2014 23:39 pm LAX 03/02/2014 01:35 pm\n" +
                 "");
         System.exit(0);
     }
