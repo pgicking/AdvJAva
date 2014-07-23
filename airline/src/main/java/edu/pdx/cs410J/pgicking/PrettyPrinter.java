@@ -2,6 +2,7 @@ package edu.pdx.cs410J.pgicking;
 
 import edu.pdx.cs410J.AbstractAirline;
 import edu.pdx.cs410J.AirlineDumper;
+import edu.pdx.cs410J.AirportNames;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -45,13 +46,16 @@ public class PrettyPrinter implements AirlineDumper{
             PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, false)));
             writer.println(abstractAirline.getName());
             for(Object o : flights) {
+                String srcLong = AirportNames.getName(((Flight)o).getSource().toUpperCase());
+                String destLong = AirportNames.getName(((Flight)o).getDestination().toUpperCase());
+
                 length = CalculateFlightLength(((Flight)o).getDeparture(),((Flight)o).getArrival());
                 String Depart = (((Flight)o).getDepartureString());
                 //System.out.println("Writng: " + abstractAirline.toString());
                 String Arrive = (((Flight)o).getArrivalString());
-                String prettyLine = "Flight: " + ((Flight)o).getNumber() + " Airport: " + ((Flight)o).getSource() +
+                String prettyLine = "Flight: " + ((Flight)o).getNumber() + " Airport: " + srcLong +
                         " departs at " + Depart + " to " +
-                        ((Flight)o).getDestination() + " arriving at " + Arrive + " Duration: " + length + " minutes";
+                        destLong + " arriving at " + Arrive + " Duration: " + length + " minutes";
                 //System.out.println("Writng: " + abstractAirline.toString());
                 writer.println(prettyLine);
             }
@@ -60,13 +64,16 @@ public class PrettyPrinter implements AirlineDumper{
         else {
             System.out.println(abstractAirline.getName());
             for (Object o : flights) {
+                String srcLong = AirportNames.getName(((Flight)o).getSource().toUpperCase());
+                String destLong = AirportNames.getName(((Flight)o).getDestination().toUpperCase());
+
                 length = CalculateFlightLength(((Flight) o).getDeparture(), ((Flight) o).getArrival());
                 String Depart = (((Flight)o).getDepartureString());
                 //System.out.println("Writng: " + abstractAirline.toString());
                 String Arrive = (((Flight)o).getArrivalString());
-                String prettyLine = "Flight: " + ((Flight)o).getNumber() + " Airport: " + ((Flight)o).getSource() +
+                String prettyLine = "Flight: " + ((Flight)o).getNumber() + " Airport: " + srcLong +
                         " departs at " + Depart + " to " +
-                        ((Flight)o).getDestination() + " arriving at " + Arrive + " Duration: " + length + " minutes";
+                        destLong + " arriving at " + Arrive + " Duration: " + length + " minutes";
                 System.out.println(prettyLine);
             }
         }
