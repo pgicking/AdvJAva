@@ -229,4 +229,11 @@ public class Project3Test extends InvokeMainTestCase{
         InvokeMainWithArgsCheckForErrorMessage(Arguments, errormessage);
     }
 
+    @Test
+    public void testOnlyPrettyPrint(){
+        String [] Arguments = {"-print", "-pretty", "-",
+                "alaska", "123", "PDX", "03/15/2014", "10:39", "pm", "ORD",  "03/02/2014", "01:35", "pm"};
+        String errormessage = "Duration: ";
+        InvokeMainWithArgsMatchForStdOut(Arguments, errormessage);
+    }
 }
