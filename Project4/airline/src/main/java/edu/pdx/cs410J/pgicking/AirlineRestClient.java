@@ -47,4 +47,49 @@ public class AirlineRestClient extends HttpRequestHelper
     {
         return post( this.url, "key", key, "value", value );
     }
+
+    public Response addAirline(String Airline) throws IOException
+    {
+        return post(this.url, "Airline", Airline);
+    }
+
+    public Response addFlight(String[] args) throws IOException
+    {
+        String hostName = null;
+        String port = null;
+        String Airline = null;
+        String FlightNum = null;
+        String src = null;
+        String Depart = null;
+        String dest = null;
+        String Arrive = null;
+
+        for(String arg : args){
+            if (hostName == null) {
+                hostName = arg;
+
+            } else if ( port == null) {
+                port = arg;
+            } else if (Airline == null){
+                Airline = arg;
+            } else if (FlightNum == null){
+                FlightNum = arg;
+            } else if (src == null){
+                src = arg;
+            } else if (Depart == null){
+                Depart = arg;
+            } else if (dest == null){
+                dest = arg;
+            } else if (Arrive == null) {
+                Arrive = arg;
+            } else if (arg == null){
+                //do nothing
+            } else{
+                System.err.println("Too many arguments");
+            }
+        }
+
+        return post(this.url, "Airline", Airline, "Flight Number", FlightNum, "Source", src, "Departure", Depart,
+                "Destination", dest, "Arrival", Arrive);
+    }
 }

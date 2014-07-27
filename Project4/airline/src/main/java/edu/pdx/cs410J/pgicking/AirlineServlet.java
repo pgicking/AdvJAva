@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class AirlineServlet extends HttpServlet
@@ -32,7 +33,59 @@ public class AirlineServlet extends HttpServlet
     {
         response.setContentType( "text/plain" );
 
-        String key = getParameter( "key", request );
+
+        String airline = getParameter( "Airline", request );
+        if (airline == null) {
+            missingRequiredParameter( response, airline );
+            return;
+        }
+
+
+        String Num = getParameter( "Flight number", request );
+        if (Num == null) {
+            missingRequiredParameter( response, Num );
+            return;
+        }
+        int flightNum = Integer.parseInt(Num);
+
+        String src = getParameter( "Source", request );
+        if (src == null) {
+            missingRequiredParameter( response, src );
+            return;
+        }
+
+
+        String Depart = getParameter( "Departure", request );
+        if (Depart == null) {
+            missingRequiredParameter( response, Depart );
+            return;
+        }
+
+        String dest = getParameter( "Destination", request );
+        if (dest == null) {
+            missingRequiredParameter( response, dest );
+            return;
+        }
+
+        String Arrive = getParameter( "Arrival", request );
+        if (Arrive == null) {
+            missingRequiredParameter( response, Arrive );
+            return;
+        }
+
+        Airline airline1 = new Airline(airline);
+
+        Flight flight = new Flight(flightNum,src,Depart,dest,Arrive);
+
+        airline1.addFlight(flight);
+
+        PrintWriter pw = response.getWriter();
+        pw.println(airline1.toString());
+        pw.flush();
+
+        response.setStatus( HttpServletResponse.SC_OK);
+
+        /*String key = getParameter( "key", request );
         if (key == null) {
             missingRequiredParameter( response, key );
             return;
@@ -51,6 +104,7 @@ public class AirlineServlet extends HttpServlet
         pw.flush();
 
         response.setStatus( HttpServletResponse.SC_OK);
+        */
     }
 
     private void missingRequiredParameter( HttpServletResponse response, String key )
@@ -62,6 +116,8 @@ public class AirlineServlet extends HttpServlet
         
         response.setStatus( HttpServletResponse.SC_PRECONDITION_FAILED );
     }
+
+
 
     private void writeValue( String key, HttpServletResponse response ) throws IOException
     {
