@@ -75,7 +75,7 @@ public class Project4 {
         try {
             response = client.addFlight(arrayArgs);
 
-            if(printFlag.equals("1")){
+            if(printFlag != null){
                 response = client.getFlights(arrayArgs[2]);
             }
 

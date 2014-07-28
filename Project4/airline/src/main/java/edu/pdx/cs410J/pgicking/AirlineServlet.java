@@ -13,6 +13,7 @@ import java.util.Map;
 public class AirlineServlet extends HttpServlet
 {
     private final Map<String, String> data = new HashMap<String, String>();
+    private final Map<String, Airline> airlineMap = new HashMap<String, Airline>();
     private Airline airline1 = null;
 
     @Override
@@ -20,8 +21,9 @@ public class AirlineServlet extends HttpServlet
     {
         response.setContentType( "text/plain" );
 
+        String airline = getParameter("Airline", request);
 
-        writeNewFlight(response);
+        writeNewFlight(response, airline);
         /*String key = getParameter( "key", request );
         if (key != null) {
             writeValue(key, response);
@@ -36,8 +38,8 @@ public class AirlineServlet extends HttpServlet
     {
         response.setContentType( "text/plain" );
 
-        String airline = getParameter( "Airline", request );
-        if (airline == null) {
+        String airlineName = getParameter( "Airline", request );
+        if (airlineName == null) {
             DebugOutput(response, "Airline");
             missingRequiredParameter(response, "Airline");
             return;
@@ -60,7 +62,7 @@ public class AirlineServlet extends HttpServlet
         }
 
 
-        String Depart = getParameter( "Departure", request );
+        String Depart = getParameter("Departure", request);
         if (Depart == null) {
             DebugOutput(response, "Departure");
             missingRequiredParameter( response, "Departure" );
@@ -81,15 +83,25 @@ public class AirlineServlet extends HttpServlet
             return;
         }
 
-        airline1 = new Airline(airline);
-
         Flight flight = new Flight(flightNum,src,Depart,dest,Arrive);
+
+        if(airlineMap.get(airlineName) == null){
+            airlineMap.put(airlineName,new Airline(airlineName));
+            airline1 = airlineMap.get(airlineName);
+        }
+        else{
+            airline1 = airlineMap.get(airlineName);
+        }
+
+
+        //airline1 = new Airline(airlineName);
+
 
         airline1.addFlight(flight);
 
         PrintWriter pw = response.getWriter();
         //pw.println(airline1.toString());
-        writeNewFlight(response);
+        //writeNewFlight(response);
         pw.flush();
 
         response.setStatus( HttpServletResponse.SC_OK);
@@ -116,16 +128,22 @@ public class AirlineServlet extends HttpServlet
         */
     }
 
-    public void writeNewFlight(HttpServletResponse response) throws IOException {
+    public void writeNewFlight(HttpServletResponse response, String airlineName) throws IOException {
 
-        String airlineName = this.airline1.getName();
-        Collection flightlist = this.airline1.getFlights();
+//        String airlineName = this.airline1.getName();
+//        Collection flightlist = this.airline1.getFlights();
+//        Airline airline = this.airline1;
+
+        Airline airline = airlineMap.get(airlineName);
+
+        PrettyPrinter printer = new PrettyPrinter();
+        //String pretty = printer.makePrettyString(airline, response);
 
         PrintWriter pw = response.getWriter();
-        pw.println(Messages.formatFlights(airlineName));
-        for(Object o : flightlist){
-            pw.println(Messages.formatFlights(String.valueOf((Flight) o)));
-        }
+
+        pw.println(airline.getName());
+        //pw.println(pretty);
+        String pretty = printer.makePrettyString(airline, response);
 
         pw.flush();
 
