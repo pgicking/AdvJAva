@@ -50,6 +50,7 @@ public class Project4 {
         //System.out.println(arrayArgs[0]);
         String portString = arrayArgs[1];
         //System.out.println(arrayArgs[1]);
+        String printFlag = arrayArgs[8];
         //hostname
         if (hostName == null) {
             usage( MISSING_ARGS );
@@ -72,10 +73,18 @@ public class Project4 {
         HttpRequestHelper.Response response = null;
 
         try {
-            client.addFlight(arrayArgs);
+            response = client.addFlight(arrayArgs);
+
+            if(printFlag.equals("1")){
+                response = client.getFlights(arrayArgs[2]);
+            }
+
+
+            checkResponseCode(HttpURLConnection.HTTP_OK, response);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         /*try {
             if (key == null) {
                 // Print all key/value pairs

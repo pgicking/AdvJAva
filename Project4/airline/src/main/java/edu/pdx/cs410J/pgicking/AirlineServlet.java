@@ -6,26 +6,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class AirlineServlet extends HttpServlet
 {
     private final Map<String, String> data = new HashMap<String, String>();
+    private Airline airline1 = null;
 
     @Override
     protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
         response.setContentType( "text/plain" );
 
-        String key = getParameter( "key", request );
+
+        writeNewFlight(response);
+        /*String key = getParameter( "key", request );
         if (key != null) {
             writeValue(key, response);
 
         } else {
             writeAllMappings(response);
-        }
+        }*/
     }
 
     @Override
@@ -33,47 +36,52 @@ public class AirlineServlet extends HttpServlet
     {
         response.setContentType( "text/plain" );
 
-
         String airline = getParameter( "Airline", request );
         if (airline == null) {
-            missingRequiredParameter( response, airline );
+            DebugOutput(response, "Airline");
+            missingRequiredParameter(response, "Airline");
             return;
         }
 
 
-        String Num = getParameter( "Flight number", request );
+        String Num = getParameter( "Flight Number", request );
         if (Num == null) {
-            missingRequiredParameter( response, Num );
+            DebugOutput(response, "Flight Number");
+            missingRequiredParameter( response, "Flight Number" );
             return;
         }
         int flightNum = Integer.parseInt(Num);
 
         String src = getParameter( "Source", request );
         if (src == null) {
-            missingRequiredParameter( response, src );
+            DebugOutput(response, "Source");
+            missingRequiredParameter( response, "Source" );
             return;
         }
 
 
         String Depart = getParameter( "Departure", request );
         if (Depart == null) {
-            missingRequiredParameter( response, Depart );
+            DebugOutput(response, "Departure");
+            missingRequiredParameter( response, "Departure" );
             return;
         }
 
         String dest = getParameter( "Destination", request );
         if (dest == null) {
-            missingRequiredParameter( response, dest );
+            DebugOutput(response, "Destination");
+            missingRequiredParameter( response, "Destination" );
             return;
         }
 
         String Arrive = getParameter( "Arrival", request );
         if (Arrive == null) {
-            missingRequiredParameter( response, Arrive );
+            DebugOutput(response, "Arrival");
+            missingRequiredParameter( response, "Arrival" );
             return;
         }
 
-        Airline airline1 = new Airline(airline);
+        airline1 = new Airline(airline);
 
         Flight flight = new Flight(flightNum,src,Depart,dest,Arrive);
 
@@ -81,6 +89,7 @@ public class AirlineServlet extends HttpServlet
 
         PrintWriter pw = response.getWriter();
         pw.println(airline1.toString());
+        writeNewFlight(response);
         pw.flush();
 
         response.setStatus( HttpServletResponse.SC_OK);
@@ -105,6 +114,31 @@ public class AirlineServlet extends HttpServlet
 
         response.setStatus( HttpServletResponse.SC_OK);
         */
+    }
+
+    public void writeNewFlight(HttpServletResponse response) throws IOException {
+
+        String airlineName = this.airline1.getName();
+        Collection flightlist = this.airline1.getFlights();
+
+        PrintWriter pw = response.getWriter();
+        pw.println(Messages.formatFlights(airlineName));
+        for(Object o : flightlist){
+            pw.println(Messages.formatFlights(String.valueOf((Flight) o)));
+        }
+
+        pw.flush();
+
+        response.setStatus( HttpServletResponse.SC_OK );
+    }
+
+    public void DebugOutput(HttpServletResponse response,String value) throws IOException {
+
+        PrintWriter pw = response.getWriter();
+        pw.println( Messages.Debugger(value));
+        pw.flush();
+
+        response.setStatus( HttpServletResponse.SC_PRECONDITION_FAILED );
     }
 
     private void missingRequiredParameter( HttpServletResponse response, String key )

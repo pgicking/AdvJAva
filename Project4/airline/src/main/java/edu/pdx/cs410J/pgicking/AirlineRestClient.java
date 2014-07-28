@@ -53,6 +53,10 @@ public class AirlineRestClient extends HttpRequestHelper
         return post(this.url, "Airline", Airline);
     }
 
+    public Response getFlights (String airline ) throws IOException {
+        return get(this.url);
+    }
+
     public Response addFlight(String[] args) throws IOException
     {
         String hostName = null;
@@ -82,7 +86,7 @@ public class AirlineRestClient extends HttpRequestHelper
                 dest = arg;
             } else if (Arrive == null) {
                 Arrive = arg;
-            } else if (arg == null){
+            } else if (arg == null || arg.equals("1")){
                 //do nothing
             } else{
                 System.err.println("Too many arguments");
@@ -91,5 +95,6 @@ public class AirlineRestClient extends HttpRequestHelper
 
         return post(this.url, "Airline", Airline, "Flight Number", FlightNum, "Source", src, "Departure", Depart,
                 "Destination", dest, "Arrival", Arrive);
+        //return post(this.url, "Airline", Airline, "Flight Number", FlightNum);
     }
 }
