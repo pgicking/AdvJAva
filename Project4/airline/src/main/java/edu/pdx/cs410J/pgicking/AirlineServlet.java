@@ -88,7 +88,7 @@ public class AirlineServlet extends HttpServlet
         airline1.addFlight(flight);
 
         PrintWriter pw = response.getWriter();
-        pw.println(airline1.toString());
+        //pw.println(airline1.toString());
         writeNewFlight(response);
         pw.flush();
 

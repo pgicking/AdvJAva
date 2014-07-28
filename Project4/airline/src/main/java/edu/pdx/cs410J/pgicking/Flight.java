@@ -36,7 +36,7 @@ public class Flight extends AbstractFlight implements Comparable<Flight>{
     @param  depart  The departure time
     @param  arrive  The arrival time
      */
-    public Flight(int number, String src, String dest, String depart, String arrive) {
+    public Flight(int number, String src, String depart, String dest, String arrive) {
         this.number = number;
         this.src = src;
         this.dest = dest;
