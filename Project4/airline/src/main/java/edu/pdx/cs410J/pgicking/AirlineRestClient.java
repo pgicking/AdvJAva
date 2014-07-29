@@ -53,8 +53,12 @@ public class AirlineRestClient extends HttpRequestHelper
         return post(this.url, "Airline", Airline);
     }
 
-    public Response getFlights (String airline ) throws IOException {
-        return get(this.url, "Airline", airline);
+    public Response searchFlights(String airline, String src, String dest, String searchFlag) throws IOException {
+        return get(this.url, "Airline", airline, "Source", src, "Destination", dest, "searchFlag", searchFlag);
+    }
+
+    public Response getFlights(String airline, String printFlag) throws IOException {
+        return get(this.url, "Airline", airline, "printFlag", printFlag);
     }
 
     public Response addFlight(String[] args) throws IOException

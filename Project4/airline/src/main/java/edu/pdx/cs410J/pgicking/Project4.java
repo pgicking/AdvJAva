@@ -51,6 +51,7 @@ public class Project4 {
         String portString = arrayArgs[1];
         //System.out.println(arrayArgs[1]);
         String printFlag = arrayArgs[8];
+        String searchFlag = arrayArgs[9];
         //hostname
         if (hostName == null) {
             usage( MISSING_ARGS );
@@ -76,13 +77,19 @@ public class Project4 {
             response = client.addFlight(arrayArgs);
 
             if(printFlag != null){
-                response = client.getFlights(arrayArgs[2]);
+                response = client.getFlights(arrayArgs[2],printFlag);
+            }
+
+            if(searchFlag != null){
+                response = client.searchFlights(arrayArgs[2],arrayArgs[4],arrayArgs[6],searchFlag);
             }
 
 
             checkResponseCode(HttpURLConnection.HTTP_OK, response);
         } catch (IOException e) {
+            error("While contacting server: " + e);
             e.printStackTrace();
+            return;
         }
 
         /*try {
@@ -115,7 +122,7 @@ public class Project4 {
         String hostName = null;
         String port = null;
         String Airline = null;
-        int FlightNum;
+        int FlightNum = 0;
         String src = null;
         String Depart = null;
         String dest = null;
@@ -142,6 +149,7 @@ public class Project4 {
 
             if(arg.contains("-search")){
                 index += 1;
+                search = "1";
                 //search path
             }
             if(arg.contains("-print")){
@@ -150,16 +158,21 @@ public class Project4 {
                 //printflag
             }
         }
-
-        Airline = args[index];
-        FlightNum = ValidateFlightNumber(args[1 + index]);
-        src = ValidateRealAirportCode(args[2 + index]);
-        dummy = args[3 + index] + " " + args[4 + index] + " " + args[5 + index];
-        Depart = FormatDateStringAsString(dummy);
-        dest = ValidateRealAirportCode(args[6 + index]);
-        dummy = args[7 + index] + " " + args[8 + index] + " " + args[9 + index];
-        Arrive = FormatDateStringAsString(dummy);
-
+        if(search == null) {
+            Airline = args[index];
+            FlightNum = ValidateFlightNumber(args[1 + index]);
+            src = ValidateRealAirportCode(args[2 + index]);
+            dummy = args[3 + index] + " " + args[4 + index] + " " + args[5 + index];
+            Depart = FormatDateStringAsString(dummy);
+            dest = ValidateRealAirportCode(args[6 + index]);
+            dummy = args[7 + index] + " " + args[8 + index] + " " + args[9 + index];
+            Arrive = FormatDateStringAsString(dummy);
+        }
+        else{
+            Airline = args[index];
+            src = ValidateRealAirportCode(args[1 + index]);
+            dest = ValidateRealAirportCode(args[2 + index]);
+        }
 
         String[] arrayArgs = {hostName, port, Airline, String.valueOf(FlightNum), src, Depart, dest, Arrive, print, search};
 

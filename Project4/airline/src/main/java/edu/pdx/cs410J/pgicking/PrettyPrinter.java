@@ -63,6 +63,7 @@ public class PrettyPrinter implements AirlineDumper{
         Long length;
         String prettyLine = null;
         PrintWriter pw = response.getWriter();
+        pw.println(abstractAirline.getName());
         //System.out.println(abstractAirline.getName());
         for (Object o : flights) {
             String srcLong = AirportNames.getName(((Flight) o).getSource().toUpperCase());
@@ -79,5 +80,22 @@ public class PrettyPrinter implements AirlineDumper{
             //System.out.println(prettyLine);
         }
        return prettyLine;
+    }
+
+    public void makePrettyFlight(Flight flight, HttpServletResponse response) throws IOException {
+        Long length;
+        String prettyLine;
+        PrintWriter pw = response.getWriter();
+        String srcLong = AirportNames.getName((flight.getSource().toUpperCase()));
+        String destLong = AirportNames.getName((flight.getDestination().toUpperCase()));
+
+        length = CalculateFlightLength(flight.getDeparture(), flight.getArrival());
+        String Depart = (flight.getDepartureString());
+        //System.out.println("Writng: " + abstractAirline.toString());
+        String Arrive = (flight.getArrivalString());
+        prettyLine = "Flight: " + flight.getNumber() + " Airport: " + srcLong +
+                " departs at " + Depart + " to " +
+                destLong + " arriving at " + Arrive + " Duration: " + length + " minutes";
+        pw.println(prettyLine);
     }
 }

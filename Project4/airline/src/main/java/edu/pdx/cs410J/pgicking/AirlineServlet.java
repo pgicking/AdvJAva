@@ -22,8 +22,20 @@ public class AirlineServlet extends HttpServlet
         response.setContentType( "text/plain" );
 
         String airline = getParameter("Airline", request);
+        String src = getParameter("Source", request);
+        String dest = getParameter("Destination", request);
+        String searchFlag = getParameter("searchFlag", request);
+        String printFlag = getParameter("printFlag", request);
 
-        writeNewFlight(response, airline);
+        if(printFlag != null) {
+            writeNewFlight(response, airline);
+        }
+
+        if(searchFlag != null){
+            searchFlights(response, airline,src,dest);
+            //search function
+        }
+
         /*String key = getParameter( "key", request );
         if (key != null) {
             writeValue(key, response);
@@ -39,49 +51,49 @@ public class AirlineServlet extends HttpServlet
         response.setContentType( "text/plain" );
 
         String airlineName = getParameter( "Airline", request );
-        if (airlineName == null) {
-            DebugOutput(response, "Airline");
-            missingRequiredParameter(response, "Airline");
-            return;
-        }
+//        if (airlineName == null) {
+//            DebugOutput(response, "Airline");
+//            missingRequiredParameter(response, "Airline");
+//            return;
+//        }
 
 
         String Num = getParameter( "Flight Number", request );
-        if (Num == null) {
-            DebugOutput(response, "Flight Number");
-            missingRequiredParameter( response, "Flight Number" );
-            return;
-        }
+//        if (Num == null) {
+//            DebugOutput(response, "Flight Number");
+//            missingRequiredParameter( response, "Flight Number" );
+//            return;
+//        }
         int flightNum = Integer.parseInt(Num);
 
         String src = getParameter( "Source", request );
-        if (src == null) {
-            DebugOutput(response, "Source");
-            missingRequiredParameter( response, "Source" );
-            return;
-        }
+//        if (src == null) {
+//            DebugOutput(response, "Source");
+//            missingRequiredParameter( response, "Source" );
+//            return;
+//        }
 
 
         String Depart = getParameter("Departure", request);
-        if (Depart == null) {
-            DebugOutput(response, "Departure");
-            missingRequiredParameter( response, "Departure" );
-            return;
-        }
+//        if (Depart == null) {
+//            DebugOutput(response, "Departure");
+//            missingRequiredParameter( response, "Departure" );
+//            return;
+//        }
 
         String dest = getParameter( "Destination", request );
-        if (dest == null) {
-            DebugOutput(response, "Destination");
-            missingRequiredParameter( response, "Destination" );
-            return;
-        }
+//        if (dest == null) {
+//            DebugOutput(response, "Destination");
+//            missingRequiredParameter( response, "Destination" );
+//            return;
+//        }
 
         String Arrive = getParameter( "Arrival", request );
-        if (Arrive == null) {
-            DebugOutput(response, "Arrival");
-            missingRequiredParameter( response, "Arrival" );
-            return;
-        }
+//        if (Arrive == null) {
+//            DebugOutput(response, "Arrival");
+//            missingRequiredParameter( response, "Arrival" );
+//            return;
+//        }
 
         Flight flight = new Flight(flightNum,src,Depart,dest,Arrive);
 
@@ -141,13 +153,35 @@ public class AirlineServlet extends HttpServlet
 
         PrintWriter pw = response.getWriter();
 
-        pw.println(airline.getName());
+        //pw.println(airline.getName());
         //pw.println(pretty);
         String pretty = printer.makePrettyString(airline, response);
 
         pw.flush();
 
         response.setStatus( HttpServletResponse.SC_OK );
+    }
+
+    public void searchFlights(HttpServletResponse response, String airlineName, String src, String dest) throws IOException {
+        Airline airline = airlineMap.get(airlineName);
+        PrettyPrinter printer = new PrettyPrinter();
+
+        if(airline == null){
+            System.err.println("That airline does not exist!");
+            return;
+        }
+
+        Collection flightlist = airline.getFlights();
+        PrintWriter pw = response.getWriter();
+
+        for(Object o : flightlist){
+            if(src.equals(((Flight)o).getSource())){
+                if(dest.equals(((Flight)o).getDestination())){
+                    printer.makePrettyFlight(((Flight)o),response);
+                }
+            }
+        }
+
     }
 
     public void DebugOutput(HttpServletResponse response,String value) throws IOException {
