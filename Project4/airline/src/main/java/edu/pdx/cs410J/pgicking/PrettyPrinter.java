@@ -58,7 +58,7 @@ public class PrettyPrinter implements AirlineDumper{
     }
 
     public String makePrettyString(Airline abstractAirline, HttpServletResponse response) throws IOException{
-        Collection flights;
+        Collection flights = null;
         flights = abstractAirline.getFlights();
         Long length;
         String prettyLine = null;

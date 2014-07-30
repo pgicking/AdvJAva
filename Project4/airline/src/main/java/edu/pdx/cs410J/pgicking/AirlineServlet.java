@@ -44,6 +44,9 @@ public class AirlineServlet extends HttpServlet
             searchFlights(response, airline,src,dest);
             //search function
         }
+
+        response.setStatus( HttpServletResponse.SC_OK);
+
     }
 
     /**
@@ -134,15 +137,26 @@ public class AirlineServlet extends HttpServlet
      */
     public void writeNewFlight(HttpServletResponse response, String airlineName) throws IOException {
 
-        Airline airline = airlineMap.get(airlineName);
-
+        PrintWriter pw = response.getWriter();
         PrettyPrinter printer = new PrettyPrinter();
 
-        PrintWriter pw = response.getWriter();
+        Airline airline = airlineMap.get(airlineName);
+        if(airline == null){
+            System.out.println("That airline does not exist");
+            response.setStatus( HttpServletResponse.SC_NO_CONTENT );
+        }
 
-        printer.makePrettyString(airline, response);
 
-        pw.flush();
+        Collection flightlist;
+        flightlist = airline.getFlights();
+
+        pw.println(airline.getName());
+        for(Object o : flightlist){
+              printer.makePrettyFlight(((Flight)o),response);
+        }
+        //printer.makePrettyString(airline, response);
+
+        //pw.flush();
 
         response.setStatus( HttpServletResponse.SC_OK );
     }
@@ -175,6 +189,9 @@ public class AirlineServlet extends HttpServlet
                 }
             }
         }
+
+        response.setStatus( HttpServletResponse.SC_OK );
+
 
     }
 

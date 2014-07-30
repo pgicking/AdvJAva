@@ -85,7 +85,7 @@ public class AirlineRestClient extends HttpRequestHelper
      * @throws IOException
      */
     public Response getFlights(String airline) throws IOException {
-        return get(this.url, "Airline", airline);
+        return get(this.url, "name", airline);
     }
 
     /**
