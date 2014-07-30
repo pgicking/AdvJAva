@@ -71,23 +71,21 @@ public class AirlineRestClient extends HttpRequestHelper
      * @param airline   The String containing the airline name
      * @param src       The string containing the source airport code
      * @param dest      The string containing the destination airport code
-     * @param searchFlag    The search flag, giving the servlet the go ahead to call the search function
      * @return  A GET request to get matching flights for the given airline
      * @throws IOException
      */
-    public Response searchFlights(String airline, String src, String dest, String searchFlag) throws IOException {
-        return get(this.url, "Airline", airline, "Source", src, "Destination", dest, "searchFlag", searchFlag);
+    public Response searchFlights(String airline, String src, String dest) throws IOException {
+        return get(this.url, "name", airline, "src", src, "dest", dest);
     }
 
     /**
      * A function that does a GET to print out all the flights for a given airline
      * @param airline   The String containing the airline name
-     * @param printFlag The printFlag giving the servlet the go ahead to call the print function
      * @return  A GET request with the airline name and print flag
      * @throws IOException
      */
-    public Response getFlights(String airline, String printFlag) throws IOException {
-        return get(this.url, "Airline", airline, "printFlag", printFlag);
+    public Response getFlights(String airline) throws IOException {
+        return get(this.url, "Airline", airline);
     }
 
     /**

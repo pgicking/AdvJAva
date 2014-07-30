@@ -62,11 +62,11 @@ public class Project4 {
             response = client.addFlight(arrayArgs);
 
             if(printFlag != null){
-                response = client.getFlights(arrayArgs[2],printFlag);
+                response = client.getFlights(arrayArgs[2]);
             }
 
             if(searchFlag != null){
-                response = client.searchFlights(arrayArgs[2],arrayArgs[4],arrayArgs[6],searchFlag);
+                response = client.searchFlights(arrayArgs[2],arrayArgs[4],arrayArgs[6]);
             }
 
 

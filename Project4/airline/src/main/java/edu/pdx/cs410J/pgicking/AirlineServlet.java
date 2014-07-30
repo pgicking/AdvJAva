@@ -30,17 +30,17 @@ public class AirlineServlet extends HttpServlet
     {
         response.setContentType( "text/plain" );
 
-        String airline = getParameter("Airline", request);
-        String src = getParameter("Source", request);
-        String dest = getParameter("Destination", request);
+        String airline = getParameter("name", request);
+        String src = getParameter("src", request);
+        String dest = getParameter("dest", request);
         String searchFlag = getParameter("searchFlag", request);
         String printFlag = getParameter("printFlag", request);
 
-        if(printFlag != null) {
+        if(src == null && dest == null) {
             writeNewFlight(response, airline);
         }
 
-        if(searchFlag != null){
+        else{
             searchFlights(response, airline,src,dest);
             //search function
         }
@@ -120,7 +120,7 @@ public class AirlineServlet extends HttpServlet
         //pw.println(airline1.getName() + " blah");
         //pw.println(airline1.toString());
         //writeNewFlight(response);
-        pw.flush();
+        //pw.flush();
 
         response.setStatus( HttpServletResponse.SC_OK);
 

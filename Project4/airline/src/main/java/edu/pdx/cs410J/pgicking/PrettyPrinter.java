@@ -79,6 +79,7 @@ public class PrettyPrinter implements AirlineDumper{
             pw.println(prettyLine);
             //System.out.println(prettyLine);
         }
+        pw.flush();
        return prettyLine;
     }
 
@@ -97,5 +98,6 @@ public class PrettyPrinter implements AirlineDumper{
                 " departs at " + Depart + " to " +
                 destLong + " arriving at " + Arrive + " Duration: " + length + " minutes";
         pw.println(prettyLine);
+        pw.flush();
     }
 }
