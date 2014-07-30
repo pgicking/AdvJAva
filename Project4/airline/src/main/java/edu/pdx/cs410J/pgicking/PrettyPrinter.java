@@ -91,7 +91,7 @@ public class PrettyPrinter implements AirlineDumper{
 
         length = CalculateFlightLength(flight.getDeparture(), flight.getArrival());
         String Depart = (flight.getDepartureString());
-        //System.out.println("Writng: " + abstractAirline.toString());
+        //System.out.println("Writng: " );
         String Arrive = (flight.getArrivalString());
         prettyLine = "Flight: " + flight.getNumber() + " Airport: " + srcLong +
                 " departs at " + Depart + " to " +

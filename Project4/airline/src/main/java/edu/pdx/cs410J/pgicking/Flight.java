@@ -59,18 +59,26 @@ public class Flight extends AbstractFlight implements Comparable<Flight>{
     }
 
     /**
-    @return Returns the depart time
+    @return Returns the depart time as a string
     */
     public String getDepartureString(){
         Depart = FormatDateStringAsString(Depart);
         return Depart;
     }
 
+    /**
+     * Returns the departure string as a date object
+     * @return The departure string as a date object
+     */
     public Date getDeparture(){
         Date Departure = FormatDateStringAsDate(Depart);
         return Departure;
     }
 
+    /**
+     * Returns the arrival string formatted as a date object
+     * @return The arrival string s a date object
+     */
     public Date getArrival(){
         Date Arrival = FormatDateStringAsDate(Arrive);
         return Arrival;

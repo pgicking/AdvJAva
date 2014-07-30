@@ -43,24 +43,60 @@ public class AirlineRestClient extends HttpRequestHelper
         return get(this.url, "key", key);
     }
 
+    /**
+     * One of daves functions, it is not used
+     * @param key
+     * @param value
+     * @return
+     * @throws IOException
+     */
     public Response addKeyValuePair( String key, String value ) throws IOException
     {
         return post( this.url, "key", key, "value", value );
     }
 
+    /**
+     * A function I wrote originally to test adding an airline
+     * @param Airline   Airline name
+     * @return  A post request
+     * @throws IOException
+     */
     public Response addAirline(String Airline) throws IOException
     {
         return post(this.url, "Airline", Airline);
     }
 
+    /**
+     * does a GET to the servlet to search its flights in a given airline to see matches
+     * @param airline   The String containing the airline name
+     * @param src       The string containing the source airport code
+     * @param dest      The string containing the destination airport code
+     * @param searchFlag    The search flag, giving the servlet the go ahead to call the search function
+     * @return  A GET request to get matching flights for the given airline
+     * @throws IOException
+     */
     public Response searchFlights(String airline, String src, String dest, String searchFlag) throws IOException {
         return get(this.url, "Airline", airline, "Source", src, "Destination", dest, "searchFlag", searchFlag);
     }
 
+    /**
+     * A function that does a GET to print out all the flights for a given airline
+     * @param airline   The String containing the airline name
+     * @param printFlag The printFlag giving the servlet the go ahead to call the print function
+     * @return  A GET request with the airline name and print flag
+     * @throws IOException
+     */
     public Response getFlights(String airline, String printFlag) throws IOException {
         return get(this.url, "Airline", airline, "printFlag", printFlag);
     }
 
+    /**
+     * A function that does a POST to the server to add a flight and potentially a new airline.
+     *
+     * @param args  An array containing all the parameters to make an airline and a flight
+     * @return  A post request to the servlet
+     * @throws IOException
+     */
     public Response addFlight(String[] args) throws IOException
     {
         String hostName = null;

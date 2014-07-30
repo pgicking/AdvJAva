@@ -20,29 +20,14 @@ public class Project4 {
 
     public static final String MISSING_ARGS = "Missing command line arguments";
 
+    /**
+     * The main function for project 4, Does do much except keep things organized, tthe brunt of the work is doen in the servlet
+     * and other functions in this main. It will error out if it cant contact the given server though.
+     * @param args  The command line arguments
+     */
     public static void main(String[] args) {
-        /*String hostName = null;
-        String portString = null;
-        String key = null;
-        String value = null;
 
-        for (String arg : args) {
-            if (hostName == null) {
-                hostName = arg;
-
-            } else if ( portString == null) {
-                portString = arg;
-
-            } else if (key == null) {
-                key = arg;
-
-            } else if (value == null) {
-                value = arg;
-
-            } else {
-                usage("Extraneous command line argument: " + arg);
-            }
-        }*/
+        CheckArgumentLength(args);
 
         String[] arrayArgs = AssignArgs(args);
 
@@ -92,32 +77,17 @@ public class Project4 {
             return;
         }
 
-        /*try {
-            if (key == null) {
-                // Print all key/value pairs
-                response = client.getAllKeysAndValues();
-
-            } else if (value == null) {
-                // Print all values of key
-                response = client.getValues(key);
-
-            } else {
-                // Post the key/value pair
-                response = client.addKeyValuePair(key, value);
-            }
-
-            checkResponseCode( HttpURLConnection.HTTP_OK, response);
-
-        } catch ( IOException ex ) {
-            error("While contacting server: " + ex);
-            return;
-        }*/
-
         System.out.println(response.getContent());
 
         System.exit(0);
     }
 
+    /**
+     * PArses the command line arguments and validates them for correctness, then returns them in an array
+     * to be given to a function that posts to the servlet to add a flight to an airline
+     * @param args  The command line arguments
+     * @return  An array with the validated strings from the command line
+     */
     public static String[] AssignArgs(String[] args){
         String hostName = null;
         String port = null;
@@ -158,6 +128,12 @@ public class Project4 {
                 //printflag
             }
         }
+
+        if(search != null && print != null){
+            System.err.println("Can only search or print, cant do both at once");
+            System.exit(1);
+        }
+
         if(search == null) {
             Airline = args[index];
             FlightNum = ValidateFlightNumber(args[1 + index]);
@@ -179,6 +155,12 @@ public class Project4 {
         return arrayArgs;
     }
 
+    /**
+     * Gets the next element from the element passed in the command line arguments
+     * @param args  The command line arguments
+     * @param option    The element you want to get the next element of. Usually -host or -port
+     * @return  Returns the next element
+     */
     public static String getNext(String[] args, String option){
         String nextArg = null;
         int i = 0;
@@ -212,6 +194,10 @@ public class Project4 {
         }
     }
 
+    /**
+     * Daves function, returns an error string
+     * @param message
+     */
     private static void error( String message )
     {
         PrintStream err = System.err;
@@ -302,17 +288,45 @@ public class Project4 {
         System.exit(1);
     }
 
+    /**
+     * Checks the argument lengths, make sure its not nothing or too many
+     * @param args  The command line arguments
+     */
+    public static void CheckArgumentLength(String[] args){
+        if(args.length == 0){
+            System.err.println("Not enough command line arguments");
+            System.exit(1);
+        }
+        if(args.length > 17){
+            System.err.println("Too many command line arguments");
+            System.exit(1);
+        }
+    }
+
+    /**
+     * The readme function, displays how to use the program
+     */
     public static void DisplayREADME(){
         System.out.println();
-        System.out.println("usage: java Project4 host port [key] [value]");
+        System.out.println("Created by Peter Gicking");
+        System.out.println("usage: java Project4 -host host -port port -print -search [airline name] [flight number]");
+        System.out.println("[Source] [Departure Time] [Destination] [Arrival Time]");
         System.out.println("  host    Host of web server");
         System.out.println("  port    Port of web server");
-        System.out.println("  key     Key to query");
-        System.out.println("  value   Value to add to server");
+        System.out.println("  airline name      Name of the airline   ");
+        System.out.println("  Flight numbers    The flight number");
+        System.out.println("  Source            Source airport code");
+        System.out.println("  Departure Time    Departure time Format: hh/dd/yyyy HH:MM am/pm");
+        System.out.println("  Destination       Destination airport code");
+        System.out.println("  Arrival           Arrival time Format: hh/dd/yyyy HH:MM am/pm");
         System.out.println();
-        System.out.println("This simple program posts key/value pairs to the server");
-        System.out.println("If no value is specified, then all values are printed");
-        System.out.println("If no key is specified, all key/value pairs are printed");
+        System.out.println("Optional arguments:");
+        System.out.println("-print");
+        System.out.println("-search");
+        System.out.println("This simple program posts airlines to the server");
+        System.out.println("The -print option can be used to print the flights");
+        System.out.println("The -search option can be used with airline source and destination");
+        System.out.println("to print matching flights within the airline");
 
         System.exit(1);
     }
