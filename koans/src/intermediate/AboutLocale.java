@@ -22,10 +22,10 @@ public class AboutLocale {
 		DateFormat dateformatBR = DateFormat.getDateInstance(DateFormat.FULL, localeBR);
 		assertEquals(dateformatBR.format(date), "Domingo, 3 de Abril de 2011");
 		
-		Locale localeJA = new Locale("ja"); // Japan
+		Locale localeJA = new Locale("us"); // Japan
 		DateFormat dateformatJA = DateFormat.getDateInstance(DateFormat.FULL, localeJA);
 		// Well if you don't know how to type these characters, try "de", "it" or "us" ;-)
-		assertEquals(dateformatJA.format(date), "2011年4月3日");
+		assertEquals(dateformatJA.format(date),"Sunday, April 3, 2011");
 	}
 	
 	@Koan
