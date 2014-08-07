@@ -44,12 +44,18 @@ public class AirlineGwt implements EntryPoint {
 
       HorizontalPanel hpanel = new HorizontalPanel();
 
-      DatePicker dpSource = CreateDatePicker(tbDepart);
-      DatePicker dpDest = CreateDatePicker(tbArrive);
+      final DatePicker dpSource = CreateDatePicker(tbDepart);
+      final DatePicker dpDest = CreateDatePicker(tbArrive);
 
       VerticalPanel panel_One = new VerticalPanel();
       VerticalPanel flight_Panel = new VerticalPanel();
       VerticalPanel misc_Panel = new VerticalPanel();
+
+      final FlexTable t = InitalizedNewFlexTable();
+
+      final TabPanel tp = new TabPanel();
+      AddTab(tp,t,"Null");
+      tp.selectTab(0);
 
       Button button = new Button("Ping Server");
       button.addClickHandler(new ClickHandler() {
@@ -86,26 +92,48 @@ public class AirlineGwt implements EntryPoint {
       });
 //      rootPanel.add(README);
 
-      Button SubmitFlight = new Button("Submit");
+      Button SubmitFlight = new Button("Add Flight");
       SubmitFlight.addClickHandler(new ClickHandler() {
           @Override
           public void onClick(ClickEvent clickEvent) {
               //Submit
-              String AirlineName = tbAirline.getText();
-              int FlightNum = Integer.parseInt(tbFlightNum.getText());
+              //Window.alert("Adding flight");
+              final String AirlineName = tbAirline.getText();
+              final int FlightNum = Integer.parseInt(tbFlightNum.getText());
               String Src = tbSrc.getText();
+              String departDate = dpSource.getValue().toString();
               String Dest = tbDest.getText();
+              String arriveDate = dpDest.getValue().toString();
+
+              Flight flight = new Flight(FlightNum,Src,departDate,Dest,arriveDate);
+              FlightServiceAsync async = GWT.create(FlightService.class);
+              async.addAirline(AirlineName, new AsyncCallback<AbstractAirline>() {
+                  @Override
+                  public void onFailure(Throwable throwable) {
+                      Window.alert(String.valueOf(throwable));
+                  }
+
+                  @Override
+                  public void onSuccess(AbstractAirline abstractAirline) {
+                      Window.alert("Added airline");
+                  }
+              });
+              async.addFlight(AirlineName, flight, new AsyncCallback<AbstractAirline>() {
+                  @Override
+                  public void onFailure(Throwable throwable) {
+                      Window.alert(throwable.toString());
+                  }
+
+                  @Override
+                  public void onSuccess(AbstractAirline abstractAirline) {
+                      Window.alert("Sucessfully added flight " + FlightNum + " to airline " + AirlineName);
+                      AddTab(tp, t, AirlineName);
+                  }
+              });
           }
       });
 
-      // Tables have no explicit size -- they resize automatically on demand.
-      FlexTable t = InitalizedNewFlexTable();
 
-      // Create a tab panel with three tabs, each of which displays a different
-      // piece of text.
-      TabPanel tp = new TabPanel();
-      AddTab(tp,t,"Null");
-      tp.selectTab(0);
 
       // Add it to the root panel.
       //RootPanel.get().add(tp);

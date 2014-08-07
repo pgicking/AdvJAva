@@ -19,7 +19,7 @@ import java.util.Date;
  * destination airport codes, a flight number, and
  * arrival and departure times</p>
 */
-public class Flight extends AbstractFlight implements Comparable<Flight>{
+public class Flight extends AbstractFlight implements Comparable<Flight> {
 
    int number;
    String src;
