@@ -45,7 +45,7 @@ public class AirlineServlet extends HttpServlet
             //search function
         }
 
-        response.setStatus( HttpServletResponse.SC_OK);
+        //response.setStatus( HttpServletResponse.SC_OK);
 
     }
 
@@ -144,6 +144,7 @@ public class AirlineServlet extends HttpServlet
         if(airline == null){
             System.out.println("That airline does not exist");
             response.setStatus( HttpServletResponse.SC_NO_CONTENT );
+            return;
         }
 
 
@@ -173,14 +174,16 @@ public class AirlineServlet extends HttpServlet
     public void searchFlights(HttpServletResponse response, String airlineName, String src, String dest) throws IOException {
         Airline airline = airlineMap.get(airlineName);
         PrettyPrinter printer = new PrettyPrinter();
+        PrintWriter pw = response.getWriter();
 
         if(airline == null){
             System.err.println("That airline does not exist!");
+            pw.println("That Airline does not exist!");
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
             return;
         }
 
         Collection flightlist = airline.getFlights();
-        PrintWriter pw = response.getWriter();
         pw.println(airline.getName());
         for(Object o : flightlist){
             if(src.equals(((Flight)o).getSource())){

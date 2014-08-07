@@ -59,8 +59,9 @@ public class Project4 {
         HttpRequestHelper.Response response = null;
 
         try {
-            response = client.addFlight(arrayArgs);
-
+            if(searchFlag == null) {
+                response = client.addFlight(arrayArgs);
+            }
             if(printFlag != null){
                 response = client.getFlights(arrayArgs[2]);
             }
@@ -78,7 +79,6 @@ public class Project4 {
         }
 
         System.out.println(response.getContent());
-
         System.exit(0);
     }
 

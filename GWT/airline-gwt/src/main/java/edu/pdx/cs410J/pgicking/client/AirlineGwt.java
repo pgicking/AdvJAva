@@ -2,7 +2,6 @@ package edu.pdx.cs410J.pgicking.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -13,15 +12,10 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.datepicker.client.DatePicker;
-import edu.pdx.cs410J.AbstractFlight;
 import edu.pdx.cs410J.AbstractAirline;
+import edu.pdx.cs410J.AbstractFlight;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.Collection;
 import java.util.Date;
 
@@ -29,7 +23,34 @@ import java.util.Date;
  * A basic GWT class that makes sure that we can send an airline back from the server
  */
 public class AirlineGwt implements EntryPoint {
+
   public void onModuleLoad() {
+
+      Label lAirline = new Label("Airline");
+      Label lFlightNum = new Label("Flight Number");
+      Label lSrc = new Label("Source Airport");
+      Label lDepart = new Label("Departure Day");
+      Label lDepartTime = new Label("Departure Time");
+      Label lDest = new Label("Destination Airport");
+      Label lArrive = new Label("Arrival Day");
+      Label lArriveTime = new Label("Arrival Time");
+
+      final TextBox tbAirline = MakeTextBox();
+      final TextBox tbFlightNum = MakeTextBoxNumbersOnly();
+      final TextBox tbSrc = MakeTextBox();
+      TextBox tbDepart = MakeTextBox();
+      final TextBox tbDest = MakeTextBox();
+      TextBox tbArrive = MakeTextBox();
+
+      HorizontalPanel hpanel = new HorizontalPanel();
+
+      DatePicker dpSource = CreateDatePicker(tbDepart);
+      DatePicker dpDest = CreateDatePicker(tbArrive);
+
+      VerticalPanel panel_One = new VerticalPanel();
+      VerticalPanel flight_Panel = new VerticalPanel();
+      VerticalPanel misc_Panel = new VerticalPanel();
+
       Button button = new Button("Ping Server");
       button.addClickHandler(new ClickHandler() {
           public void onClick(ClickEvent clickEvent) {
@@ -65,30 +86,36 @@ public class AirlineGwt implements EntryPoint {
       });
 //      rootPanel.add(README);
 
+      Button SubmitFlight = new Button("Submit");
+      SubmitFlight.addClickHandler(new ClickHandler() {
+          @Override
+          public void onClick(ClickEvent clickEvent) {
+              //Submit
+              String AirlineName = tbAirline.getText();
+              int FlightNum = Integer.parseInt(tbFlightNum.getText());
+              String Src = tbSrc.getText();
+              String Dest = tbDest.getText();
+          }
+      });
 
-      DatePicker dpSource = CreateDatePicker();
-      DatePicker dpDest = CreateDatePicker();
+      // Tables have no explicit size -- they resize automatically on demand.
+      FlexTable t = InitalizedNewFlexTable();
+
+      // Create a tab panel with three tabs, each of which displays a different
+      // piece of text.
+      TabPanel tp = new TabPanel();
+      AddTab(tp,t,"Null");
+      tp.selectTab(0);
+
+      // Add it to the root panel.
+      //RootPanel.get().add(tp);
+
       // Add the widgets to the page
 //      RootPanel.get().add(text);
 //      RootPanel.get().add(datePicker);
 
-      Label lAirline = new Label("Airline");
-      Label lFlightNum = new Label("Flight Number");
-      Label lSrc = new Label("Source Airport");
-      Label lDepart = new Label("Departure Day");
-      Label lDest = new Label("Destination Airport");
-      Label lArrive = new Label("Arrival Day");
-
-      // Make some text boxes. The password text box is identical to the text
-      // box, except that the input is visually masked by the browser.
-      TextBox tbAirline = MakeTextBox();
-      TextBox tbFlightNum = MakeTextBoxNumbersOnly();
-      TextBox tbSrc = MakeTextBox();
-      TextBox tbDest = MakeTextBox();
 
       // Add them to the root panel_One.
-      VerticalPanel panel_One = new VerticalPanel();
-      panel_One.add(README);
       panel_One.add(lAirline);
       panel_One.add(tbAirline);
       panel_One.add(lFlightNum);
@@ -97,17 +124,28 @@ public class AirlineGwt implements EntryPoint {
       panel_One.add(tbSrc);
       panel_One.add(lDepart);
       panel_One.add(dpSource);
+      panel_One.add(lDepartTime);
+      panel_One.add(tbDepart);
       panel_One.add(lDest);
       panel_One.add(tbDest);
       panel_One.add(lArrive);
       panel_One.add(dpDest);
-      rootPanel.add(panel_One);
+      panel_One.add(lArriveTime);
+      panel_One.add(tbArrive);
+      panel_One.add(SubmitFlight);
 
+      flight_Panel.add(tp);
 
+      hpanel.add(panel_One);
+      hpanel.add(flight_Panel);
 
+      misc_Panel.add(README);
+      misc_Panel.add(button);
 
-      rootPanel.add(button);
-      rootPanel.add(README);
+      hpanel.add(misc_Panel);
+
+      rootPanel.add(hpanel);
+
       //rootPanel.add(text);
       //rootPanel.add(datePicker);
 
@@ -134,7 +172,26 @@ public class AirlineGwt implements EntryPoint {
 //      rp.add(p);
   }
 
-    private DatePicker CreateDatePicker() {
+    private FlexTable InitalizedNewFlexTable() {
+        FlexTable t = new FlexTable();
+        t.setText(0, 0, "Flight Number");
+        t.setText(0, 1, "Source Airport");
+        t.setText(0, 2, "Departure Time");
+        t.setText(0, 3, "Destination Airport");
+        t.setText(0, 4, "Arrival Time");
+
+
+        // ...and set it's column span so that it takes up the whole row.
+        t.getFlexCellFormatter().setColSpan(1, 0, 3);
+
+        return t;
+    }
+
+    private void AddTab(TabPanel tp, FlexTable t, String airlineName) {
+        tp.add(t, airlineName);
+    }
+
+    private DatePicker CreateDatePicker(TextBox tb) {
         DatePicker datePicker = new DatePicker();
         final Label text = new Label();
 
@@ -159,9 +216,9 @@ public class AirlineGwt implements EntryPoint {
         tb.addKeyPressHandler(new KeyPressHandler() {
 
             public void onKeyPress(KeyPressEvent event) {
-                if (Character.isDigit(event.getCharCode())) {
-                    ((TextBox) event.getSource()).cancelKey();
-                }
+//                if (Character.isDigit(event.getCharCode())) {
+//                    ((TextBox) event.getSource()).cancelKey();
+//                }
             }
         });
         return tb;
