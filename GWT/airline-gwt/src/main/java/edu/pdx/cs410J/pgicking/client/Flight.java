@@ -5,6 +5,8 @@ import edu.pdx.cs410J.AbstractFlight;
 import java.lang.Comparable;
 import java.util.Date;
 
+import static edu.pdx.cs410J.pgicking.client.AirlineGwt.FormatDateStringAsDate;
+
 //import static edu.pdx.cs410J.pgicking.Project3.FormatDateStringAsDate;
 //import static edu.pdx.cs410J.pgicking.Project3.FormatDateStringAsString;
 
@@ -75,19 +77,17 @@ public class Flight extends AbstractFlight implements Comparable<Flight> {
      * Returns the departure string as a date object
      * @return The departure string as a date object
      */
-//    public Date getDeparture(){
-//        Date Departure = FormatDateStringAsDate(Depart);
-//        return Departure;
-//    }
+    public Date getDeparture(){
+        return FormatDateStringAsDate(Depart);
+    }
 
     /**
      * Returns the arrival string formatted as a date object
      * @return The arrival string s a date object
      */
-//    public Date getArrival(){
-//        Date Arrival = FormatDateStringAsDate(Arrive);
-//        return Arrival;
-//    }
+    public Date getArrival(){
+        return FormatDateStringAsDate(Arrive);
+    }
 
     /**
     @return  returns the destination airports code

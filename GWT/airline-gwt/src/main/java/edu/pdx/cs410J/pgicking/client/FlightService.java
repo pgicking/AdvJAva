@@ -17,4 +17,6 @@ public interface FlightService extends RemoteService{
 
     public AbstractAirline getAirlines(String airlineName);
 
+    public AbstractAirline searchFlights(String airlineName, String Src, String Dest);
+
 }

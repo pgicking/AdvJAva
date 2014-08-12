@@ -7,6 +7,7 @@ import edu.pdx.cs410J.pgicking.client.Airline;
 import edu.pdx.cs410J.pgicking.client.Flight;
 import edu.pdx.cs410J.pgicking.client.FlightService;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -32,5 +33,12 @@ public class FlightServiceImpl extends RemoteServiceServlet implements FlightSer
     @Override
     public AbstractAirline getAirlines(String airlineName) {
         return airlineHashMap.get(airlineName);
+    }
+
+    @Override
+    public AbstractAirline searchFlights(String airlineName, String Src, String Dest) {
+        Airline airline = airlineHashMap.get(airlineName);
+
+        return airline;
     }
 }
