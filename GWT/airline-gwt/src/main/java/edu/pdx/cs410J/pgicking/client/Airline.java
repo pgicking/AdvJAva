@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.pgicking.client;
 
+import com.google.gwt.user.client.ui.FlexTable;
 import edu.pdx.cs410J.AbstractAirline;
 import edu.pdx.cs410J.AbstractFlight;
 

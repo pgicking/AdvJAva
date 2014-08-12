@@ -28,4 +28,9 @@ public class FlightServiceImpl extends RemoteServiceServlet implements FlightSer
         airlineHashMap.put(airlineName, airline);
         return airline;
     }
+
+    @Override
+    public AbstractAirline getAirlines(String airlineName) {
+        return airlineHashMap.get(airlineName);
+    }
 }
