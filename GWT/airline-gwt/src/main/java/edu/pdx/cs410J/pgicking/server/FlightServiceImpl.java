@@ -15,32 +15,57 @@ import java.util.HashMap;
  * Created by pgicking on 8/7/14.
  */
 public class FlightServiceImpl extends RemoteServiceServlet implements FlightService {
-    HashMap<String, Airline> airlineHashMap = new HashMap<>();
+    HashMap<String, Airline> airlineHashMap = new HashMap<String, Airline>();
     int j = 0;
 
     @Override
     public AbstractAirline addFlight(String airlineName, Flight flight) {
-        Airline airline = airlineHashMap.get(airlineName);
-        airline.addFlight(flight);
-        airlineHashMap.put(airlineName,airline);
-        int i = 0;
-        for(Object o : airline.getFlights()) {
-            System.out.println(airlineName);
-            System.out.println(airline.getName());
-            System.out.println(o.toString());
-            ++i;
-            ++j;
-            System.out.println(i);
-            System.out.println("j: " + j);
-        }
-        return airline;
+//        Airline airline = airlineHashMap.get(airlineName);
+//        airline.addFlight(flight);
+//        airlineHashMap.put(airlineName,airline);
+//        System.out.println(airlineHashMap.toString());
+        airlineHashMap.get(airlineName).addFlight(flight);
+//        int i = 0;
+//        for(Object o : airlineHashMap.get(airlineName).getFlights()) {
+//            System.out.println(airlineName);
+//            System.out.println(o.toString());
+//            ++i;
+//            ++j;
+//            System.out.println(i);
+//            System.out.println("j: " + j);
+//        }
+        return airlineHashMap.get(airlineName);
     }
+
+//    @Override
+//    public AbstractAirline addFlight(String airlineName, String FlightNum, String Src, String Depart, String dest, String Arrive) {
+//        Flight flight = new Flight(Integer.parseInt(FlightNum), Src, Depart, dest, Arrive );
+//        airlineHashMap.get(airlineName).addFlight(flight);
+//
+//        int i = 0;
+//        for(Object o : airlineHashMap.get(airlineName).getFlights()) {
+//            System.out.println(airlineName);
+//            System.out.println(o.toString());
+//            ++i;
+//            ++j;
+//            System.out.println(i);
+//            System.out.println("j: " + j);
+//        }
+//        return airlineHashMap.get(airlineName);
+//
+//    }
 
     @Override
     public AbstractAirline addAirline(String airlineName) {
-        Airline airline = new Airline(airlineName);
-        airlineHashMap.put(airlineName, airline);
-        return airline;
+        Airline airline = airlineHashMap.get(airlineName);
+        if(airline != null){
+            return airline;
+        }
+        else {
+            airline = new Airline(airlineName);
+            airlineHashMap.put(airlineName, airline);
+            return airline;
+        }
     }
 
     @Override

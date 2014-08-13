@@ -107,6 +107,7 @@ public class AirlineGwt implements EntryPoint {
       RootPanel rootPanel = RootPanel.get();
 
 
+
       Button README = new Button("HELP");
       README.addClickHandler(new ClickHandler() {
           @Override
@@ -124,13 +125,13 @@ public class AirlineGwt implements EntryPoint {
               //Submit
               final String AirlineName = tbAirline.getText();
               final int FlightNum = Integer.parseInt(tbFlightNum.getText());
-              String Src = tbSrc.getText();
+              String Src = tbSrc.getText().toUpperCase();
               String departDate = dateBoxDeparture.getTextBox().getText(); //dpSource.getValue().toString();
               String departTime = tbDepart.getText();
               String Depart = departDate + " " + departTime;
               //Date DDay = FormatDateStringAsDate(Depart);
               //Window.alert(String.valueOf(DDay));
-              String Dest = tbDest.getText();
+              String Dest = tbDest.getText().toUpperCase();
               String arriveDate = dateBoxArrival.getTextBox().getText(); //dpDest.getValue().toString();
               String arriveTime = tbArrive.getText();
               String Arrive = arriveDate + " " + arriveTime;
@@ -327,8 +328,9 @@ public class AirlineGwt implements EntryPoint {
         Collection flightList = airline.getFlights();
         int i = 1;
         FlexTable t = flexMap.get(airlineName);
+        t.removeAllRows();
+        t = RewriteHeader(t);
         Collections.sort((LinkedList) flightList);
-
 
 
         for (Object o : flightList) {
@@ -354,8 +356,8 @@ public class AirlineGwt implements EntryPoint {
 
     private void AddToSearchResults(LinkedList<Flight> flightList, FlexTable t, String airlineName){
         int i = 1;
-        //t.clear();
-        //t = InitalizedNewFlexTable();
+        t.removeAllRows();
+        t = InitalizedNewFlexTable();
 
         for (Object o : flightList) {
             try {
@@ -375,6 +377,10 @@ public class AirlineGwt implements EntryPoint {
 
             }
         }
+    }
+
+    private void updateTable(FlexTable t){
+
     }
 
 
@@ -468,6 +474,18 @@ public class AirlineGwt implements EntryPoint {
 
         // ...and set it's column span so that it takes up the whole row.
         //t.getFlexCellFormatter().setColSpan(1, 0, 3);
+
+        return t;
+    }
+
+    private FlexTable RewriteHeader(FlexTable t){
+        t.setCellSpacing(10);
+        t.setText(0, 0, "Flight Number");
+        t.setText(0, 1, "Source Airport");
+        t.setText(0, 2, "Departure Time");
+        t.setText(0, 3, "Destination Airport");
+        t.setText(0, 4, "Arrival Time");
+        t.setText(0, 5, "Duration");
 
         return t;
     }

@@ -55,8 +55,7 @@ public class Airline extends AbstractAirline implements Serializable{
     */
     @Override
     public void addFlight(AbstractFlight abstractFlight) {
-        FlightList.add((Flight)abstractFlight);
-        System.out.println(FlightList.toString());
+        this.FlightList.add((Flight)abstractFlight);
         Collections.sort(FlightList);
     }
 
@@ -67,7 +66,7 @@ public class Airline extends AbstractAirline implements Serializable{
     */
     @Override
     public Collection getFlights() {
-        return FlightList;
+        return this.FlightList;
     }
 
 

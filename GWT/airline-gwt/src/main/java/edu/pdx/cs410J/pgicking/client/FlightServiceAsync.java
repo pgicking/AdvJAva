@@ -15,4 +15,6 @@ public interface FlightServiceAsync {
     void getAirlines(String airlineName, AsyncCallback<AbstractAirline> async);
 
     void searchFlights(String airlineName, String Src, String Dest, AsyncCallback<AbstractAirline> async);
+
+    //void addFlight(String airlineName, String FlightNum, String Src, String Depart, String dest, String Arrive, AsyncCallback<AbstractAirline> async);
 }
