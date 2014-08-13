@@ -18,15 +18,18 @@ import edu.pdx.cs410J.AbstractAirline;
 import edu.pdx.cs410J.AirportNames;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 /**
- * A basic GWT class that makes sure that we can send an airline back from the server
+ * The main class that handles most of the work for the airline application.
  */
 public class AirlineGwt implements EntryPoint {
 
+    /**
+     * The brunt of the work for the airline application, loads and organizes all the buttons
+     * contains all the functions for what to do on click events
+     * Initalizes everything and creates vert and horizontal panels to organize the UI
+     */
   public void onModuleLoad() {
 
       Label lAirline = new Label("Airline");
@@ -94,37 +97,14 @@ public class AirlineGwt implements EntryPoint {
       VerticalPanel misc_Panel = new VerticalPanel();
 
       final FlexTable t = InitalizedNewFlexTable();
-      final FlexTable searchResults = InitalizedNewFlexTable();
+      final FlexTable searchResultsTable = InitalizedNewFlexTable();
 
       final TabPanel tp = new TabPanel();
       AddTab(tp,t,"Null");
       tp.selectTab(0);
       final HashMap<String, FlexTable> flexMap = new HashMap<>();
 
-//      Button button = new Button("Ping Server");
-//      button.addClickHandler(new ClickHandler() {
-//          public void onClick(ClickEvent clickEvent) {
-//              PingServiceAsync async = GWT.create(PingService.class);
-//              async.ping(new AsyncCallback<AbstractAirline>() {
-//
-//                  public void onFailure(Throwable ex) {
-//                      Window.alert(ex.toString());
-//                  }
-//
-//                  public void onSuccess(AbstractAirline airline) {
-//                      StringBuilder sb = new StringBuilder(airline.toString());
-//                      Collection<AbstractFlight> flights = airline.getFlights();
-//                      for (AbstractFlight flight : flights) {
-//                          sb.append(flight);
-//                          sb.append("\n");
-//                      }
-//                      Window.alert(sb.toString());
-//                  }
-//              });
-//          }
-//      });
       RootPanel rootPanel = RootPanel.get();
-//      rootPanel.add(button);
 
 
       Button README = new Button("HELP");
@@ -155,6 +135,16 @@ public class AirlineGwt implements EntryPoint {
               String arriveTime = tbArrive.getText();
               String Arrive = arriveDate + " " + arriveTime;
 
+              //Dest = FormatDateStringAsString(Dest);
+              //Arrive = FormatDateStringAsString(Arrive);
+
+              try {
+                  CheckMissingFields(AirlineName,String.valueOf(FlightNum),Src,departDate,departTime,Dest,arriveDate,arriveTime,false);
+              } catch (Exception e) {
+                  Window.alert(e.toString());
+                  return;
+              }
+
               Flight flight = new Flight(FlightNum,Src,Depart,Dest,Arrive);
               //Window.alert("Adding flight: " + flight.toString());
               FlightServiceAsync async = GWT.create(FlightService.class);
@@ -167,15 +157,22 @@ public class AirlineGwt implements EntryPoint {
                   @Override
                   public void onSuccess(AbstractAirline abstractAirline) {
                       //Window.alert("Added airline");
-                      if(flexMap.get(AirlineName) == null) {
+                      String tab = tp.getTabBar().getTabHTML(0);
+                      if(tab.equals("Null")){
+                          tp.getTabBar().setTabHTML(0, AirlineName);
+                          flexMap.put(AirlineName,t);
+                      }
+                      else if (flexMap.get(AirlineName) == null) {
                           FlexTable t = InitalizedNewFlexTable();
                           AddTab(tp, t, AirlineName);
                           flexMap.put(AirlineName, t);
                       }
-//                      String tab = tp.getTabBar().getTabHTML(0);
-//                      if(tab.equals("Null")){
-//                          tp.remove(0);
+//                      Collection blah = abstractAirline.getFlights();
+//                      String test = null;
+//                      for(Object o : blah){
+//                          test = o.toString();
 //                      }
+//                      Window.alert(test);
 
                   }
               });
@@ -190,13 +187,19 @@ public class AirlineGwt implements EntryPoint {
                   public void onSuccess(AbstractAirline abstractAirline) {
                       //Window.alert("Sucessfully added flight " + FlightNum + " to airline " + AirlineName);
                       //update flextable
-
+//                      Collection blah = abstractAirline.getFlights();
+//                      String test = null;
+//                      for(Object o : blah){
+//                          test = o.toString();
+//                      }
+//                      Window.alert(test);
                       try {
                           AddToTable(abstractAirline, flexMap, AirlineName);
                       } catch (IOException e) {
                           Window.alert(e.toString() + "\nYour flight has not been added");
                           return;
                       }
+
                   }
               });
           }
@@ -206,9 +209,16 @@ public class AirlineGwt implements EntryPoint {
       searchButton.addClickHandler(new ClickHandler() {
           @Override
           public void onClick(ClickEvent clickEvent) {
-              String searchAirline = searchAirlineBox.getText();
+              final String searchAirline = searchAirlineBox.getText();
               final String searchSrc = searchSrcBox.getText();
               final String searchDest = searchDestBox.getText();
+
+              try {
+                  CheckMissingFields(searchAirline,null,searchSrc,null,null,searchDest,null,null,true);
+              } catch (Exception e) {
+                  Window.alert(e.toString());
+                  return;
+              }
 
               try {
                   ValidateRealAirportCode(searchSrc);
@@ -219,9 +229,7 @@ public class AirlineGwt implements EntryPoint {
                   return;
               }
 
-              Window.alert("Before search call");
               FlightServiceAsync async = GWT.create(FlightService.class);
-              Window.alert("After async");
               async.searchFlights(searchAirline, searchSrc, searchDest, new AsyncCallback<AbstractAirline>() {
                   @Override
                   public void onFailure(Throwable throwable) {
@@ -231,18 +239,22 @@ public class AirlineGwt implements EntryPoint {
                   @Override
                   public void onSuccess(AbstractAirline abstractAirline) {
                       Collection flightList = abstractAirline.getFlights();
-                        Window.alert("After search call");
+                      LinkedList<Flight> searchResults = new LinkedList<Flight>();
+                      //Window.alert("Searching flights");
+                      if(!abstractAirline.getName().equals(searchAirline)){
+                          Window.alert("That airline does not exist");
+                          return;
+                      }
                       for (Object o : flightList) {
                           if (searchSrc.equals(((Flight) o).getSource())) {
                               if (searchDest.equals(((Flight) o).getDestination())) {
-                                  try {
-                                      AddToTable(abstractAirline, flexMap, abstractAirline.getName());
-                                  } catch (IOException e) {
-                                      e.printStackTrace();
-                                  }
+                                  searchResults.add(((Flight)o));
+                                  Window.alert("Adding :" + o.toString());
                               }
                           }
                       }
+
+                      AddToSearchResults(searchResults, searchResultsTable, abstractAirline.getName());
                   }
               });
           }
@@ -250,15 +262,6 @@ public class AirlineGwt implements EntryPoint {
 
 
 
-      // Add it to the root panel.
-      //RootPanel.get().add(tp);
-
-      // Add the widgets to the page
-//      RootPanel.get().add(text);
-//      RootPanel.get().add(datePicker);
-
-
-      // Add them to the root panel_One.
       panel_One.add(lAirline);
       panel_One.add(tbAirline);
       panel_One.add(lFlightNum);
@@ -266,14 +269,12 @@ public class AirlineGwt implements EntryPoint {
       panel_One.add(lSrc);
       panel_One.add(tbSrc);
       panel_One.add(lDepart);
-      //panel_One.add(dpSource);
       panel_One.add(dateBoxDeparture);
       panel_One.add(lDepartTime);
       panel_One.add(tbDepart);
       panel_One.add(lDest);
       panel_One.add(tbDest);
       panel_One.add(lArrive);
-      //panel_One.add(dpDest);
       panel_One.add(dateBoxArrival);
       panel_One.add(lArriveTime);
       panel_One.add(tbArrive);
@@ -283,7 +284,7 @@ public class AirlineGwt implements EntryPoint {
 
       hpanel.add(panel_One);
       hpanel.add(flight_Panel);
-      hpanel.add(searchResults);
+      hpanel.add(searchResultsTable);
 
       misc_Panel.add(README);
       misc_Panel.add(searchAirlineLabel);
@@ -293,7 +294,6 @@ public class AirlineGwt implements EntryPoint {
       misc_Panel.add(searchDestLabel);
       misc_Panel.add(searchDestBox);
       misc_Panel.add(searchButton);
-//      misc_Panel.add(button);
 
       hpanel.add(misc_Panel);
 
@@ -301,6 +301,10 @@ public class AirlineGwt implements EntryPoint {
 
   }
 
+    /**
+     * "Builds" the README
+     * @return  A README string
+     */
     private String getREADME() {
         String README = "Airline Application Created by Peter Gicking ©\n\n\n" +
                 "This application will store multiple flights for multiple airlines.\n" +
@@ -312,10 +316,21 @@ public class AirlineGwt implements EntryPoint {
         return README;
     }
 
+    /**
+     * Adds to the flextable of a given airline a new flight
+     * @param airline
+     * @param flexMap
+     * @param airlineName
+     * @throws IOException
+     */
     private void AddToTable(AbstractAirline airline, HashMap<String, FlexTable> flexMap, String airlineName) throws IOException{
         Collection flightList = airline.getFlights();
         int i = 1;
         FlexTable t = flexMap.get(airlineName);
+        Collections.sort((LinkedList) flightList);
+
+
+
         for (Object o : flightList) {
             try {
                 //t.addCell(i);
@@ -337,8 +352,109 @@ public class AirlineGwt implements EntryPoint {
         }
     }
 
+    private void AddToSearchResults(LinkedList<Flight> flightList, FlexTable t, String airlineName){
+        int i = 1;
+        //t.clear();
+        //t = InitalizedNewFlexTable();
+
+        for (Object o : flightList) {
+            try {
+                //t.addCell(i);
+                t.insertRow(i);
+                t.setText(i, 0, String.valueOf(((Flight) o).getNumber()));
+                t.setText(i, 1, ValidateRealAirportCode(((Flight) o).getSource()));
+                t.setText(i, 2, ((Flight) o).getDepartureString());
+                t.setText(i, 3, ValidateRealAirportCode(((Flight) o).getDestination()));
+                t.setText(i, 4, ((Flight) o).getArrivalString());
+                t.setText(i, 5, String.valueOf(CalculateFlightLength((((Flight) o).getDeparture()), ((Flight) o).getArrival()) +
+                        " minutes"));
+                ++i;
+            } catch (IOException e){
+                t.removeRow(i);
+                String error = e.toString();
+
+            }
+        }
+    }
 
 
+    /**
+     * Checks if any of the fields are empty and throws an error if any are
+     * @param airlineName
+     * @param FlightNum
+     * @param Src
+     * @param departDate
+     * @param departTime
+     * @param Dest
+     * @param arriveDate
+     * @param arriveTime
+     * @param searchFlag    If true, only checks airlinename, source and desination
+     * @throws Exception
+     */
+    private void CheckMissingFields(String airlineName,
+                                    String FlightNum,
+                                    String Src,
+                                    String departDate,
+                                    String departTime,
+                                    String Dest,
+                                    String arriveDate,
+                                    String arriveTime,
+                                    boolean searchFlag)
+                                    throws Exception{
+        String empties = "";
+        boolean isEmpty = false;
+
+        if(airlineName.isEmpty()){
+            empties += "Airline\n";
+            isEmpty = true;
+        }
+
+        if(Src.isEmpty()){
+            empties += "Source Aiport\n";
+            isEmpty = true;
+        }
+
+        if (Dest.isEmpty()) {
+            empties += "Destination Airport\n";
+            isEmpty = true;
+        }
+
+        if(!searchFlag) {
+            if(FlightNum.isEmpty()){
+                empties += "Flight Number\n";
+                isEmpty = true;
+            }
+
+            if (departDate.isEmpty()) {
+                empties += "Departure Day\n";
+                isEmpty = true;
+            }
+
+            if (departTime.isEmpty()) {
+                empties += "Departure Time\n";
+                isEmpty = true;
+            }
+            if (arriveDate.isEmpty()) {
+                empties += "Arrival Day\n";
+                isEmpty = true;
+            }
+            if (arriveTime.isEmpty()) {
+                empties += "Arrival Time\n";
+                isEmpty = true;
+            }
+        }
+
+        if(isEmpty){
+            throw new Exception("Missing required fields: " + "\n" + empties);
+        }
+
+    }
+
+    /**
+     * Initalizes a new flex table with headers for information
+     * about a flight
+     * @return  An initalized flex table
+     */
     private FlexTable InitalizedNewFlexTable() {
         FlexTable t = new FlexTable();
         t.setCellSpacing(10);
@@ -356,6 +472,13 @@ public class AirlineGwt implements EntryPoint {
         return t;
     }
 
+    /**
+     * Adds a tab to tab panel containing airline name and adds a flex table
+     * that will contain the flight list
+     * @param tp    The Tab panel
+     * @param t     The flex table to be added
+     * @param airlineName   The airline name to label the tab with
+     */
     private void AddTab(TabPanel tp, FlexTable t, String airlineName) {
         tp.add(t, airlineName);
     }
@@ -414,7 +537,27 @@ public class AirlineGwt implements EntryPoint {
         //Window.alert("Formatted date object: " + date.toString());
         return date;
     }
+    /**
+     * Checks to make sure the date is in the correct format (no regex this time)
+     * and then puts it in a certain format
+     * @param arg The arrival or departure date strings
+     * @return The formatted date
+     */
+    public static String FormatDateStringAsString(String arg) {
+        Date date = null;
+        //DateTimeFormat dtf = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT);
 
+        DateTimeFormat dtf = DateTimeFormat.getFormat("MM/dd/yyyy hh:mm a");
+        //DateTimeFormat dtf = DateTimeFormat.getMediumDateTimeFormat();
+        //SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+        //Date parsedDate = formatter.parse(arg);
+
+        date = dtf.parse(arg);
+
+        //dtf.format(date);
+        //Window.alert("Formatted date object: " + date.toString());
+        return date.toString();
+    }
     /**
      * Calculates the flight time in minutes for prettyPrint
      * @param depart    The departure date
@@ -428,6 +571,10 @@ public class AirlineGwt implements EntryPoint {
         return length;
     }
 
+    /**
+     * A textbox that accepts alphanumerics
+     * @return A textbox
+     */
     private TextBox MakeTextBox() {
         TextBox tb = new TextBox();
 
@@ -439,6 +586,10 @@ public class AirlineGwt implements EntryPoint {
         return tb;
     }
 
+    /**
+     * Makes a text box that only accepts numerics
+     * @return  A textbox that only returns numerics
+     */
     private TextBox MakeTextBoxNumbersOnly() {
         TextBox tb = new TextBox();
 
@@ -453,6 +604,10 @@ public class AirlineGwt implements EntryPoint {
         return tb;
     }
 
+    /**
+     * Makes a text box which can only accept letters
+     * @return A textbo which only accepts letters
+     */
     private TextBox MakeTextBoxLettersOnly() {
         TextBox tb = new TextBox();
 

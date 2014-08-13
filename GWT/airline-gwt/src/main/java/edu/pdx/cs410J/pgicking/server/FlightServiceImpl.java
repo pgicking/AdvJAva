@@ -8,6 +8,7 @@ import edu.pdx.cs410J.pgicking.client.Flight;
 import edu.pdx.cs410J.pgicking.client.FlightService;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -15,11 +16,23 @@ import java.util.HashMap;
  */
 public class FlightServiceImpl extends RemoteServiceServlet implements FlightService {
     HashMap<String, Airline> airlineHashMap = new HashMap<>();
+    int j = 0;
 
     @Override
     public AbstractAirline addFlight(String airlineName, Flight flight) {
         Airline airline = airlineHashMap.get(airlineName);
         airline.addFlight(flight);
+        airlineHashMap.put(airlineName,airline);
+        int i = 0;
+        for(Object o : airline.getFlights()) {
+            System.out.println(airlineName);
+            System.out.println(airline.getName());
+            System.out.println(o.toString());
+            ++i;
+            ++j;
+            System.out.println(i);
+            System.out.println("j: " + j);
+        }
         return airline;
     }
 

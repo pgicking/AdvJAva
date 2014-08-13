@@ -11,6 +11,7 @@ import java.util.Collection;
  */
 @RemoteServiceRelativePath("flight")
 public interface FlightService extends RemoteService{
+
     public AbstractAirline addFlight(String airlineName, Flight flight);
 
     public AbstractAirline addAirline(String airlineName);

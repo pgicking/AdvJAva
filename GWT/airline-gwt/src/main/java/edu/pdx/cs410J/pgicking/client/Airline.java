@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.pgicking.client;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import edu.pdx.cs410J.AbstractAirline;
 import edu.pdx.cs410J.AbstractFlight;
@@ -20,9 +21,10 @@ import java.util.LinkedList;
  *  go to the Flight class to be stored.</p>
  */
 
-public class Airline extends AbstractAirline {
+public class Airline extends AbstractAirline implements Serializable{
     String Name;
     LinkedList<Flight> FlightList = new LinkedList<>();
+    //Collection<Flight> FlightList = new LinkedList<>();
 
     /**
     Creates an airline and sets the name passed in from flight.java
@@ -48,12 +50,13 @@ public class Airline extends AbstractAirline {
 
 
     /**
-    addsa new flight to the flight list passed in from Project1.java
+    adds a new flight to the flight list passed in from Project1.java
     @param abstractFlight  A object of type flight
     */
     @Override
     public void addFlight(AbstractFlight abstractFlight) {
         FlightList.add((Flight)abstractFlight);
+        System.out.println(FlightList.toString());
         Collections.sort(FlightList);
     }
 
