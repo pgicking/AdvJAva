@@ -18,7 +18,7 @@ public interface FlightService extends RemoteService{
 
     public AbstractAirline addAirline(String airlineName);
 
-    public AbstractAirline getAirlines(String airlineName);
+    public java.util.LinkedList<String> getAirlines();
 
     public AbstractAirline searchFlights(String airlineName, String Src, String Dest);
 

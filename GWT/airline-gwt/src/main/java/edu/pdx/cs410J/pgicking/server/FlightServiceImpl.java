@@ -1,15 +1,13 @@
 package edu.pdx.cs410J.pgicking.server;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import edu.pdx.cs410J.AbstractAirline;
 import edu.pdx.cs410J.pgicking.client.Airline;
 import edu.pdx.cs410J.pgicking.client.Flight;
 import edu.pdx.cs410J.pgicking.client.FlightService;
 
-import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * Created by pgicking on 8/7/14.
@@ -25,15 +23,6 @@ public class FlightServiceImpl extends RemoteServiceServlet implements FlightSer
 //        airlineHashMap.put(airlineName,airline);
 //        System.out.println(airlineHashMap.toString());
         airlineHashMap.get(airlineName).addFlight(flight);
-//        int i = 0;
-//        for(Object o : airlineHashMap.get(airlineName).getFlights()) {
-//            System.out.println(airlineName);
-//            System.out.println(o.toString());
-//            ++i;
-//            ++j;
-//            System.out.println(i);
-//            System.out.println("j: " + j);
-//        }
         return airlineHashMap.get(airlineName);
     }
 
@@ -69,8 +58,12 @@ public class FlightServiceImpl extends RemoteServiceServlet implements FlightSer
     }
 
     @Override
-    public AbstractAirline getAirlines(String airlineName) {
-        return airlineHashMap.get(airlineName);
+    public LinkedList<String> getAirlines() {
+        LinkedList<String> airlineList = new LinkedList<>();
+        for (Airline airline : airlineHashMap.values()) {
+             airlineList.add(airline.getName());
+        }
+        return airlineList;
     }
 
     @Override

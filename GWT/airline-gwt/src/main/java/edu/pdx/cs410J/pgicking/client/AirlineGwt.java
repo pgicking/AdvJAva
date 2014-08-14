@@ -106,6 +106,7 @@ public class AirlineGwt implements EntryPoint {
 
       RootPanel rootPanel = RootPanel.get();
 
+      updateTable(flexMap,tp);
 
 
       Button README = new Button("HELP");
@@ -211,8 +212,8 @@ public class AirlineGwt implements EntryPoint {
           @Override
           public void onClick(ClickEvent clickEvent) {
               final String searchAirline = searchAirlineBox.getText();
-              final String searchSrc = searchSrcBox.getText();
-              final String searchDest = searchDestBox.getText();
+              final String searchSrc = searchSrcBox.getText().toUpperCase();
+              final String searchDest = searchDestBox.getText().toUpperCase();
 
               try {
                   CheckMissingFields(searchAirline,null,searchSrc,null,null,searchDest,null,null,true);
@@ -250,7 +251,7 @@ public class AirlineGwt implements EntryPoint {
                           if (searchSrc.equals(((Flight) o).getSource())) {
                               if (searchDest.equals(((Flight) o).getDestination())) {
                                   searchResults.add(((Flight)o));
-                                  Window.alert("Adding :" + o.toString());
+                                  //Window.alert("Adding :" + o.toString());
                               }
                           }
                       }
@@ -357,7 +358,7 @@ public class AirlineGwt implements EntryPoint {
     private void AddToSearchResults(LinkedList<Flight> flightList, FlexTable t, String airlineName){
         int i = 1;
         t.removeAllRows();
-        t = InitalizedNewFlexTable();
+        t = RewriteHeader(t);
 
         for (Object o : flightList) {
             try {
@@ -379,8 +380,29 @@ public class AirlineGwt implements EntryPoint {
         }
     }
 
-    private void updateTable(FlexTable t){
+    private void updateTable(final HashMap<String, FlexTable> flexMap, final TabPanel tp){
+        FlightServiceAsync async = GWT.create(FlightService.class);
+        async.getAirlines(new AsyncCallback<LinkedList<String>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                Window.alert(throwable.toString());
+            }
 
+            @Override
+            public void onSuccess(LinkedList<String> strings) {
+                for(String s : strings){
+                    FlexTable t = flexMap.get(s);
+                    AddTab(tp,t,s);
+
+                    String tab = tp.getTabBar().getTabHTML(0);
+                    if(tab.equals("Null")){
+                        tp.getTabBar().setTabHTML(0,s);
+                    }
+
+
+                }
+            }
+        });
     }
 
 
