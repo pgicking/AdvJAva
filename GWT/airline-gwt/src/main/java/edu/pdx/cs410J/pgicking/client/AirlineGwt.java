@@ -363,6 +363,12 @@ public class AirlineGwt implements EntryPoint {
         }
     }
 
+    /**
+     * Adds the results to the search flexTable.
+     * @param flightList
+     * @param t
+     * @param airlineName
+     */
     private void AddToSearchResults(LinkedList<Flight> flightList, FlexTable t, String airlineName){
         int i = 1;
         t.removeAllRows();
@@ -388,6 +394,13 @@ public class AirlineGwt implements EntryPoint {
         }
     }
 
+    /**
+     * Function called before anything else to keep the data persistant after a refresh
+     * A bit buggy though, it doesnt delete the default tab bar.
+     * @param airlineHashMap
+     * @param flexMap
+     * @param tp
+     */
     private void updateTable(final HashMap<String, Airline> airlineHashMap, final HashMap<String, FlexTable> flexMap, final TabPanel tp){
         FlightServiceAsync async = GWT.create(FlightService.class);
         async.getAirlines(new AsyncCallback<LinkedList<String>>() {
@@ -529,6 +542,12 @@ public class AirlineGwt implements EntryPoint {
         return t;
     }
 
+    /**
+     * Rewrites the header for the tables beucase they are often deleted to display
+     * the sorted list
+     * @param t  Flextable to write to
+     * @return  Written flexTable
+     */
     private FlexTable RewriteHeader(FlexTable t){
         t.setCellSpacing(10);
         t.setText(0, 0, "Flight Number");
