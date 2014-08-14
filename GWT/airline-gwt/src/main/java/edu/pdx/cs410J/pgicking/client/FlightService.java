@@ -5,6 +5,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import edu.pdx.cs410J.AbstractAirline;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * Created by pgicking on 8/7/14.
@@ -21,5 +22,7 @@ public interface FlightService extends RemoteService{
     public java.util.LinkedList<String> getAirlines();
 
     public AbstractAirline searchFlights(String airlineName, String Src, String Dest);
+
+    public HashMap<String, Airline> getAirlineHashMap();
 
 }

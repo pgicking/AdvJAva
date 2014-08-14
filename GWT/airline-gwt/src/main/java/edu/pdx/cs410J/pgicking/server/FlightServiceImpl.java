@@ -26,23 +26,6 @@ public class FlightServiceImpl extends RemoteServiceServlet implements FlightSer
         return airlineHashMap.get(airlineName);
     }
 
-//    @Override
-//    public AbstractAirline addFlight(String airlineName, String FlightNum, String Src, String Depart, String dest, String Arrive) {
-//        Flight flight = new Flight(Integer.parseInt(FlightNum), Src, Depart, dest, Arrive );
-//        airlineHashMap.get(airlineName).addFlight(flight);
-//
-//        int i = 0;
-//        for(Object o : airlineHashMap.get(airlineName).getFlights()) {
-//            System.out.println(airlineName);
-//            System.out.println(o.toString());
-//            ++i;
-//            ++j;
-//            System.out.println(i);
-//            System.out.println("j: " + j);
-//        }
-//        return airlineHashMap.get(airlineName);
-//
-//    }
 
     @Override
     public AbstractAirline addAirline(String airlineName) {
@@ -71,5 +54,11 @@ public class FlightServiceImpl extends RemoteServiceServlet implements FlightSer
         Airline airline = airlineHashMap.get(airlineName);
 
         return airline;
+    }
+
+    @Override
+    public HashMap<String, Airline> getAirlineHashMap() {
+
+        return airlineHashMap;
     }
 }

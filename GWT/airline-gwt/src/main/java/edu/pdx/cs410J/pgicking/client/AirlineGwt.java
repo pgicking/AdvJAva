@@ -2,6 +2,7 @@ package edu.pdx.cs410J.pgicking.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -49,20 +50,26 @@ public class AirlineGwt implements EntryPoint {
       tbAirline.setMaxLength(30);
       //tbAirline.setVisibleLength(30);
       tbAirline.getElement().setAttribute("placeholder", "Alaska");
+      //tbAirline.getElement().getStyle().setBorderWidth(1, Style.Unit.PX);
+
       final TextBox tbFlightNum = MakeTextBoxNumbersOnly();
       tbFlightNum.getElement().setAttribute("placeholder", "123");
       tbFlightNum.setMaxLength(10);
       //tbFlightNum.setVisibleLength(10);
+
       final TextBox tbSrc = MakeTextBoxLettersOnly();
       tbSrc.getElement().setAttribute("placeholder", "PDX");
       tbSrc.setMaxLength(3);
       tbSrc.setVisibleLength(3);
+
       final TextBox tbDepart = MakeTextBox();
       tbDepart.getElement().setAttribute("placeholder", "HH:MM am/pm");
+
       final TextBox tbDest = MakeTextBoxLettersOnly();
       tbDest.getElement().setAttribute("placeholder", "LAX");
       tbDest.setMaxLength(3);
       tbDest.setVisibleLength(3);
+
       final TextBox tbArrive = MakeTextBox();
       tbArrive.getElement().setAttribute("placeholder", "HH:MM am/pm");
 
@@ -100,13 +107,26 @@ public class AirlineGwt implements EntryPoint {
       final FlexTable searchResultsTable = InitalizedNewFlexTable();
 
       final TabPanel tp = new TabPanel();
+
       AddTab(tp,t,"Null");
       tp.selectTab(0);
       final HashMap<String, FlexTable> flexMap = new HashMap<>();
 
       RootPanel rootPanel = RootPanel.get();
 
-      updateTable(flexMap,tp);
+
+      FlightServiceAsync async = GWT.create(FlightService.class);
+      async.getAirlineHashMap(new AsyncCallback<HashMap<String, Airline>>() {
+          @Override
+          public void onFailure(Throwable throwable) {
+              Window.alert(throwable.toString());
+          }
+
+          @Override
+          public void onSuccess(HashMap<String, Airline> AirlineHashMap) {
+              updateTable(AirlineHashMap, flexMap, tp);
+          }
+      });
 
 
       Button README = new Button("HELP");
@@ -130,15 +150,10 @@ public class AirlineGwt implements EntryPoint {
               String departDate = dateBoxDeparture.getTextBox().getText(); //dpSource.getValue().toString();
               String departTime = tbDepart.getText();
               String Depart = departDate + " " + departTime;
-              //Date DDay = FormatDateStringAsDate(Depart);
-              //Window.alert(String.valueOf(DDay));
               String Dest = tbDest.getText().toUpperCase();
               String arriveDate = dateBoxArrival.getTextBox().getText(); //dpDest.getValue().toString();
               String arriveTime = tbArrive.getText();
               String Arrive = arriveDate + " " + arriveTime;
-
-              //Dest = FormatDateStringAsString(Dest);
-              //Arrive = FormatDateStringAsString(Arrive);
 
               try {
                   CheckMissingFields(AirlineName,String.valueOf(FlightNum),Src,departDate,departTime,Dest,arriveDate,arriveTime,false);
@@ -147,8 +162,17 @@ public class AirlineGwt implements EntryPoint {
                   return;
               }
 
+              try {
+                  FormatDateStringAsString(Depart);
+                  FormatDateStringAsString(Arrive);
+              }catch(Exception e){
+                  Window.alert(e.toString() + "\nYour flight was not added");
+                  return;
+              }
+
+
               Flight flight = new Flight(FlightNum,Src,Depart,Dest,Arrive);
-              //Window.alert("Adding flight: " + flight.toString());
+
               FlightServiceAsync async = GWT.create(FlightService.class);
               async.addAirline(AirlineName, new AsyncCallback<AbstractAirline>() {
                   @Override
@@ -169,12 +193,6 @@ public class AirlineGwt implements EntryPoint {
                           AddTab(tp, t, AirlineName);
                           flexMap.put(AirlineName, t);
                       }
-//                      Collection blah = abstractAirline.getFlights();
-//                      String test = null;
-//                      for(Object o : blah){
-//                          test = o.toString();
-//                      }
-//                      Window.alert(test);
 
                   }
               });
@@ -187,14 +205,6 @@ public class AirlineGwt implements EntryPoint {
 
                   @Override
                   public void onSuccess(AbstractAirline abstractAirline) {
-                      //Window.alert("Sucessfully added flight " + FlightNum + " to airline " + AirlineName);
-                      //update flextable
-//                      Collection blah = abstractAirline.getFlights();
-//                      String test = null;
-//                      for(Object o : blah){
-//                          test = o.toString();
-//                      }
-//                      Window.alert(test);
                       try {
                           AddToTable(abstractAirline, flexMap, AirlineName);
                       } catch (IOException e) {
@@ -242,7 +252,6 @@ public class AirlineGwt implements EntryPoint {
                   public void onSuccess(AbstractAirline abstractAirline) {
                       Collection flightList = abstractAirline.getFlights();
                       LinkedList<Flight> searchResults = new LinkedList<Flight>();
-                      //Window.alert("Searching flights");
                       if(!abstractAirline.getName().equals(searchAirline)){
                           Window.alert("That airline does not exist");
                           return;
@@ -251,7 +260,6 @@ public class AirlineGwt implements EntryPoint {
                           if (searchSrc.equals(((Flight) o).getSource())) {
                               if (searchDest.equals(((Flight) o).getDestination())) {
                                   searchResults.add(((Flight)o));
-                                  //Window.alert("Adding :" + o.toString());
                               }
                           }
                       }
@@ -333,7 +341,7 @@ public class AirlineGwt implements EntryPoint {
         t = RewriteHeader(t);
         Collections.sort((LinkedList) flightList);
 
-
+        //Window.alert(flightList.toString());
         for (Object o : flightList) {
             try {
                 //t.addCell(i);
@@ -380,7 +388,7 @@ public class AirlineGwt implements EntryPoint {
         }
     }
 
-    private void updateTable(final HashMap<String, FlexTable> flexMap, final TabPanel tp){
+    private void updateTable(final HashMap<String, Airline> airlineHashMap, final HashMap<String, FlexTable> flexMap, final TabPanel tp){
         FlightServiceAsync async = GWT.create(FlightService.class);
         async.getAirlines(new AsyncCallback<LinkedList<String>>() {
             @Override
@@ -390,16 +398,38 @@ public class AirlineGwt implements EntryPoint {
 
             @Override
             public void onSuccess(LinkedList<String> strings) {
+                Airline airline = null;
                 for(String s : strings){
-                    FlexTable t = flexMap.get(s);
-                    AddTab(tp,t,s);
+                   FlexTable t = new FlexTable();
 
                     String tab = tp.getTabBar().getTabHTML(0);
-                    if(tab.equals("Null")){
-                        tp.getTabBar().setTabHTML(0,s);
+                    if(flexMap.get(s) == null ){
+                        t = InitalizedNewFlexTable();
+                        flexMap.put(s,t);
+                        AddTab(tp,t,s);
                     }
+                    else if(tab.equals("Null")){
+//                      tp.getTabBar().setTabHTML(0,s);
+                        t = flexMap.get(s);
+                        AddTab(tp,t,s);
+                        tp.getTabBar().removeTab(0);
+                    }
+                    else {
+                        t = flexMap.get(s);
+                        AddTab(tp, t, s);
+                    }
+                    airline = airlineHashMap.get(s);
 
-
+                    try {
+                        AddToTable(airline,flexMap,s);
+                    } catch (IOException e) {
+                        Window.alert("This should never happen, grats you broke it.\n" + e.toString());
+                    }
+                }
+                String tab = tp.getTabBar().getTabHTML(0);
+                if(tab.equals("Null")){
+                    Window.alert("Removing null tab");
+                    tp.getTabBar().removeTab(0);
                 }
             }
         });
@@ -485,6 +515,7 @@ public class AirlineGwt implements EntryPoint {
      */
     private FlexTable InitalizedNewFlexTable() {
         FlexTable t = new FlexTable();
+        t.getElement().getStyle().setBorderWidth(20, Style.Unit.PX);
         t.setCellSpacing(10);
         t.setText(0, 0, "Flight Number");
         t.setText(0, 1, "Source Airport");
@@ -563,15 +594,14 @@ public class AirlineGwt implements EntryPoint {
      * @param arg  The array of command line arguments
      * @return   A date object
      */
-    public static Date FormatDateStringAsDate(String arg){
-        Date date = null;
+    public static Date FormatDateStringAsDate(String arg) {
         //DateTimeFormat dtf = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT);
 
         DateTimeFormat dtf = DateTimeFormat.getFormat("MM/dd/yyyy hh:mm a");
         //DateTimeFormat dtf = DateTimeFormat.getMediumDateTimeFormat();
         //SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
         //Date parsedDate = formatter.parse(arg);
-
+        Date date = null;
         date = dtf.parse(arg);
         //dtf.format(date);
         //Window.alert("Formatted date object: " + date.toString());
@@ -583,17 +613,17 @@ public class AirlineGwt implements EntryPoint {
      * @param arg The arrival or departure date strings
      * @return The formatted date
      */
-    public static String FormatDateStringAsString(String arg) {
+    public static String FormatDateStringAsString(String arg) throws Exception {
         Date date = null;
-        //DateTimeFormat dtf = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT);
 
         DateTimeFormat dtf = DateTimeFormat.getFormat("MM/dd/yyyy hh:mm a");
-        //DateTimeFormat dtf = DateTimeFormat.getMediumDateTimeFormat();
-        //SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
-        //Date parsedDate = formatter.parse(arg);
 
-        date = dtf.parse(arg);
+        try {
+            date = dtf.parse(arg);
+        }catch (Exception e){
+            throw new Exception("Your date is text: " + arg + " is malformed!" );
 
+        }
         //dtf.format(date);
         //Window.alert("Formatted date object: " + date.toString());
         return date.toString();
