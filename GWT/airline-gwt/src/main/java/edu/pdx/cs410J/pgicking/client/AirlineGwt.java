@@ -170,6 +170,14 @@ public class AirlineGwt implements EntryPoint {
                   return;
               }
 
+              try{
+                  ValidateRealAirportCode(Src);
+                  ValidateRealAirportCode(Dest);
+              } catch(Exception e){
+                  Window.alert(e.toString());
+                  return;
+              }
+
 
               Flight flight = new Flight(FlightNum,Src,Depart,Dest,Arrive);
 
