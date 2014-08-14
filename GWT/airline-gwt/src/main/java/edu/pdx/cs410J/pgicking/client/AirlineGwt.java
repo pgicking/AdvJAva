@@ -108,7 +108,7 @@ public class AirlineGwt implements EntryPoint {
 
       final TabPanel tp = new TabPanel();
 
-      AddTab(tp,t,"Null");
+      AddTab(tp,t,"Airline");
       tp.selectTab(0);
       final HashMap<String, FlexTable> flexMap = new HashMap<>();
 
@@ -184,7 +184,7 @@ public class AirlineGwt implements EntryPoint {
                   public void onSuccess(AbstractAirline abstractAirline) {
                       //Window.alert("Added airline");
                       String tab = tp.getTabBar().getTabHTML(0);
-                      if(tab.equals("Null")){
+                      if(tab.equals("Airline")){
                           tp.getTabBar().setTabHTML(0, AirlineName);
                           flexMap.put(AirlineName,t);
                       }
@@ -402,18 +402,17 @@ public class AirlineGwt implements EntryPoint {
                 for(String s : strings){
                    FlexTable t = new FlexTable();
 
-                    String tab = tp.getTabBar().getTabHTML(0);
                     if(flexMap.get(s) == null ){
                         t = InitalizedNewFlexTable();
                         flexMap.put(s,t);
                         AddTab(tp,t,s);
                     }
-                    else if(tab.equals("Null")){
-//                      tp.getTabBar().setTabHTML(0,s);
-                        t = flexMap.get(s);
-                        AddTab(tp,t,s);
-                        tp.getTabBar().removeTab(0);
-                    }
+//                    else if(airlineHashMap.get(tab) == null){
+////                      tp.getTabBar().setTabHTML(0,s);
+//                        t = flexMap.get(s);
+//                        AddTab(tp,t,s);
+//                        tp.getTabBar().removeTab(0);
+//                    }
                     else {
                         t = flexMap.get(s);
                         AddTab(tp, t, s);
@@ -427,8 +426,7 @@ public class AirlineGwt implements EntryPoint {
                     }
                 }
                 String tab = tp.getTabBar().getTabHTML(0);
-                if(tab.equals("Null")){
-                    Window.alert("Removing null tab");
+                if(tab.equals("Airline")){
                     tp.getTabBar().removeTab(0);
                 }
             }
