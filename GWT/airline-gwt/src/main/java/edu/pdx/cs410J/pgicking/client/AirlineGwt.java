@@ -108,8 +108,6 @@ public class AirlineGwt implements EntryPoint {
 
       final TabPanel tp = new TabPanel();
 
-      AddTab(tp,t,"Airline");
-      tp.selectTab(0);
       final HashMap<String, FlexTable> flexMap = new HashMap<>();
 
       RootPanel rootPanel = RootPanel.get();
@@ -127,6 +125,19 @@ public class AirlineGwt implements EntryPoint {
               updateTable(AirlineHashMap, flexMap, tp);
           }
       });
+
+      String tab = tp.getTabBar().getTabHTML(0);
+      //Window.alert(String.valueOf(tp.getTabBar().getTabCount()));
+//      if(tab.isEmpty()) {
+//          AddTab(tp, t, "Airline");
+//          tp.selectTab(0);
+//      }
+//      else if (tab.equals("Airline")){
+//          tp.remove(0);
+//          tp.selectTab(0);
+//      }
+
+
 
 
       Button README = new Button("HELP");
@@ -192,15 +203,31 @@ public class AirlineGwt implements EntryPoint {
                   public void onSuccess(AbstractAirline abstractAirline) {
                       //Window.alert("Added airline");
                       String tab = tp.getTabBar().getTabHTML(0);
+                      FlexTable t = InitalizedNewFlexTable();
                       if(tab.equals("Airline")){
-                          tp.getTabBar().setTabHTML(0, AirlineName);
-                          flexMap.put(AirlineName,t);
+                          tp.remove(0);
+                          t = flexMap.get(AirlineName);
+                          if(t == null){
+                              FlexTable ft = InitalizedNewFlexTable();
+                              AddTab(tp, ft, AirlineName);
+                              flexMap.put(AirlineName, ft);
+                              flexMap.put("Airline", t);
+                          }
+                          else{
+                              flexMap.put("Airline", t);
+                              flexMap.put(AirlineName,t);
+                          }
+//                          tp.getTabBar().setTabHTML(0, AirlineName);
+//                          flexMap.put(AirlineName,t);
+//                          tp.getWidgetIndex(t);
                       }
-                      else if (flexMap.get(AirlineName) == null) {
-                          FlexTable t = InitalizedNewFlexTable();
-                          AddTab(tp, t, AirlineName);
-                          flexMap.put(AirlineName, t);
+                      if (flexMap.get(AirlineName) == null) {
+                          FlexTable ft = InitalizedNewFlexTable();
+                          AddTab(tp, ft, AirlineName);
+                          flexMap.put(AirlineName, ft);
+
                       }
+
 
                   }
               });
@@ -446,10 +473,14 @@ public class AirlineGwt implements EntryPoint {
                         Window.alert("This should never happen, grats you broke it.\n" + e.toString());
                     }
                 }
-                String tab = tp.getTabBar().getTabHTML(0);
-                if(tab.equals("Airline")){
-                    tp.getTabBar().removeTab(0);
+                //Window.alert(String.valueOf(tp.getTabBar().getTabCount()));
+                if(tp.getTabBar().getTabCount() == 0) {
+                    FlexTable t = InitalizedNewFlexTable();
+                    AddTab(tp, t, "Airline");
+                    flexMap.put("Airline", t);
+                    tp.selectTab(0);
                 }
+                //tp.selectTab(0);
             }
         });
     }
@@ -577,6 +608,7 @@ public class AirlineGwt implements EntryPoint {
      */
     private void AddTab(TabPanel tp, FlexTable t, String airlineName) {
         tp.add(t, airlineName);
+        tp.selectTab(tp.getWidgetIndex(t));
     }
 
     private DatePicker CreateDatePicker(TextBox tb) {
